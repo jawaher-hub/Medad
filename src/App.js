@@ -6,6 +6,7 @@ import RegisterRole from './pages/RegisterRole';
 import RegisterRestaurant from './pages/RegisterRestaurant';
 import RegisterCharity from './pages/RegisterCharity';
 import Login from './pages/Login';
+import ForgotPassword from './pages/ForgotPassword';
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
 
 
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
         </Routes>
       </div>
     </Router>
