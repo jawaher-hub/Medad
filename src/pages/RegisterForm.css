@@ -76,7 +76,7 @@
   .auth-form {
     padding: 20px 15px; 
     width: 95%; 
-    box-shadow: none; /
+    box-shadow: none;
   }
 
   .auth-form h2 {
@@ -108,6 +108,27 @@
   text-align: left;
 }
 
-input:invalid:not(:placeholder-shown) {
+input:user-invalid {
   border-color: #e57373;
+  background-color: #fff8f8;
+}
+.form-select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 15px;
+  background-color: white;
+  cursor: pointer;
+  color: #333;
+}
+
+.form-select:focus {
+  outline: none;
+  border-color: #2e7d32;
+}
+
+optgroup {
+  font-weight: bold;
+  color: #2e7d32;
 }

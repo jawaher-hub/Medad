@@ -53,7 +53,7 @@ const RegisterRestaurant = () => {
     <div className="form-container">
       <form className="auth-form" onSubmit={handleSubmit}>
         <h2>Restaurant</h2>
-        
+        <p>Be the reason a meal isn't wasted</p>
         {error && <div className="error-banner">{error}</div>}
 
         <div className="input-group">
