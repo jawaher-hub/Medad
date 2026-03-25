@@ -77,3 +77,17 @@
     padding: 25px 20px;
   }
 }
+.error-banner {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  border: 1px solid #ef9a9a;
+  text-align: left;
+}
+
+input:invalid:not(:placeholder-shown) {
+  border-color: #e57373;
+}
