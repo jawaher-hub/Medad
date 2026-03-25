@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
 import MainWelcome from './pages/MainWelcome';
 import RegisterRole from './pages/RegisterRole';
-
+import RegisterRestaurant from './pages/RegisterRestaurant';
 const Login = () => <div style={{padding: '50px'}}>Login Page...</div>;
 
 function App() {
@@ -12,14 +12,17 @@ function App() {
       <div className="App">
         <Navbar />
         <Routes>
-          {/* Home Page */}
+          
           <Route path="/" element={<MainWelcome />} />
           
-          {/* Role Selection Page */}
+          
           <Route path="/register-role" element={<RegisterRole />} />
           
-          {/* Login Page */}
+          
           <Route path="/login" element={<Login />} />
+
+
+          <Route path="/register-restaurant" element={<RegisterRestaurant />} />
         </Routes>
       </div>
     </Router>
