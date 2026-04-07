@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './RegisterForm.css';
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
 
@@ -13,59 +15,73 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
+
     if (!credentials.email.includes('@')) {
-      setError("Please enter a valid email address");
+      setError('Please enter a valid email address');
       return;
     }
-    console.log("Attempting login...", credentials);
+
+    if (
+        credentials.email === 'admin@medad.com' &&
+        credentials.password === '123456'
+    ) {
+      navigate('/admin/dashboard');
+      return;
+    }
+
+    setError('Invalid email or password');
   };
 
   return (
-    <div className="form-container">
-      <form className="auth-form" onSubmit={handleLogin}>
-        <h1 className="brand-title">Medad</h1>
-        <p className="brand-subtitle">Bridging the Gap Between Surplus and Need.</p>
-        
-        <h2 className="form-type-title">Sign In</h2>
+      <div className="form-container">
+        <form className="auth-form" onSubmit={handleLogin}>
+          <h1 className="brand-title">Medad</h1>
+          <p className="brand-subtitle">Bridging the Gap Between Surplus and Need.</p>
 
-        {error && <div className="error-banner">{error}</div>}
-        <div className="input-group">
-          <label>Email Address</label>
-          <input 
-            type="email" 
-            name="email" 
-            placeholder="your@email.com" 
-            required 
-            onChange={handleChange} 
-          />
-        </div>
+          <h2 className="form-type-title">Sign In</h2>
 
-        <div className="input-group">
-          <label>Password</label>
-          <input 
-            type="password" 
-            name="password" 
-            placeholder="••••••••" 
-            required 
-            onChange={handleChange} 
-          />
-        </div>
+          {error && <div className="error-banner">{error}</div>}
 
-        <div className="forgot-pass">
-          <Link to="/forgot-password">Forgot password?</Link>
-        </div>
+          <div className="input-group">
+            <label>Email Address</label>
+            <input
+                type="email"
+                name="email"
+                placeholder="your@email.com"
+                required
+                value={credentials.email}
+                onChange={handleChange}
+            />
+          </div>
 
-        <button type="submit" className="submit-btn">Sign In</button>
+          <div className="input-group">
+            <label>Password</label>
+            <input
+                type="password"
+                name="password"
+                placeholder="••••••••"
+                required
+                value={credentials.password}
+                onChange={handleChange}
+            />
+          </div>
 
-        <div className="divider">
-          <span>OR</span>
-        </div>
+          <div className="forgot-pass">
+            <Link to="/forgot-password">Forgot password?</Link>
+          </div>
 
-        <p className="footer-text">
-          Don't have an account? <Link to="/register-role">Sign Up</Link>
-        </p>
-      </form>
-    </div>
+          <button type="submit" className="submit-btn">Sign In</button>
+
+          <div className="divider">
+            <span>OR</span>
+          </div>
+
+          <p className="footer-text">
+            Don't have an account? <Link to="/register-role">Sign Up</Link>
+          </p>
+        </form>
+      </div>
   );
 };
+
 export default Login;
