@@ -44,7 +44,7 @@ const RegisterRestaurant = () => {
       setError(validationError);
       return;
     }
-
+    
     console.log("Success!", formData);
     alert("Account created successfully!");
   };

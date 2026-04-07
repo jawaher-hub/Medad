@@ -1,0 +1,1355 @@
+Index: src/App.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from 'react';\r\nimport { BrowserRouter as Router, Routes, Route } from 'react-router-dom';\r\nimport Navbar from './components/Navbar/Navbar';\r\nimport MainWelcome from './pages/MainWelcome';\r\nimport RegisterRole from './pages/RegisterRole';\r\nimport RegisterRestaurant from './pages/RegisterRestaurant';\r\nimport RegisterCharity from './pages/RegisterCharity';\r\nimport Login from './pages/Login';\r\nimport ForgotPassword from './pages/ForgotPassword';\r\nimport AdminDashboard from './pages/Administrator/AdminDashboard';\r\nimport PendingApprovals from './pages/Administrator/PendingApprovals';\r\nimport SafetyMonitor from './pages/Administrator/SafetyMonitor';\r\nimport UserManagement from './pages/Administrator/UserManagement';\r\nimport AdminSettings from './pages/Administrator/AdminSettings';\r\n\r\n\r\nfunction App() {\r\n  return (\r\n    <Router>\r\n      <div className=\"App\">\r\n        <Navbar />\r\n        <Routes>\r\n          \r\n          <Route path=\"/\" element={<MainWelcome />} />\r\n          \r\n          \r\n          <Route path=\"/register-role\" element={<RegisterRole />} />\r\n          \r\n          \r\n\r\n\r\n          <Route path=\"/register-restaurant\" element={<RegisterRestaurant />} />\r\n        \r\n\r\n          <Route path=\"/register-charity\" element={<RegisterCharity />} />\r\n          <Route path=\"/admin/dashboard\" element={<AdminDashboard />} />\r\n          <Route path=\"/admin/pending-approvals\" element={<PendingApprovals />} />\r\n          <Route path=\"/admin/safety-monitor\" element={<SafetyMonitor />} />\r\n          <Route path=\"/admin/user-management\" element={<UserManagement />} />\r\n          <Route path=\"/admin/settings\" element={<AdminSettings />} />\r\n\r\n          <Route path=\"/login\" element={<Login />} />\r\n          <Route path=\"/forgot-password\" element={<ForgotPassword />} />\r\n        </Routes>\r\n      </div>\r\n    </Router>\r\n  );\r\n}\r\nexport default App;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/App.js b/src/App.js
+--- a/src/App.js	(revision 26b414f0207548012dbf0f6243f6ae67adb995db)
++++ b/src/App.js	(date 1775591051716)
+@@ -7,11 +7,6 @@
+ import RegisterCharity from './pages/RegisterCharity';
+ import Login from './pages/Login';
+ import ForgotPassword from './pages/ForgotPassword';
+-import AdminDashboard from './pages/Administrator/AdminDashboard';
+-import PendingApprovals from './pages/Administrator/PendingApprovals';
+-import SafetyMonitor from './pages/Administrator/SafetyMonitor';
+-import UserManagement from './pages/Administrator/UserManagement';
+-import AdminSettings from './pages/Administrator/AdminSettings';
+ 
+ 
+ function App() {
+@@ -33,11 +28,7 @@
+         
+ 
+           <Route path="/register-charity" element={<RegisterCharity />} />
+-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+-          <Route path="/admin/pending-approvals" element={<PendingApprovals />} />
+-          <Route path="/admin/safety-monitor" element={<SafetyMonitor />} />
+-          <Route path="/admin/user-management" element={<UserManagement />} />
+-          <Route path="/admin/settings" element={<AdminSettings />} />
++
+ 
+           <Route path="/login" element={<Login />} />
+           <Route path="/forgot-password" element={<ForgotPassword />} />
+Index: src/pages/Restaurant/AddFoodListing.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/Restaurant/AddFoodListing.js b/src/pages/Restaurant/AddFoodListing.js
+new file mode 100644
+--- /dev/null	(date 1775590848634)
++++ b/src/pages/Restaurant/AddFoodListing.js	(date 1775590848634)
+@@ -0,0 +1,115 @@
++import React, { useState } from 'react';
++import { useNavigate } from 'react-router-dom';
++import './AddFoodListing.css';
++
++function AddFoodListing() {
++  const navigate = useNavigate();
++  const [form, setForm] = useState({
++    foodName: '', category: '', quantity: '', expirationDate: '', photo: null
++  });
++  const [errors, setErrors] = useState({});
++  const [submitted, setSubmitted] = useState(false);
++
++  const validate = () => {
++    const newErrors = {};
++    if (!form.foodName) newErrors.foodName = 'Food name is required';
++    if (!form.category) newErrors.category = 'Category is required';
++    if (!form.quantity || form.quantity <= 0) newErrors.quantity = 'Quantity must be greater than 0';
++    if (!form.expirationDate) newErrors.expirationDate = 'Expiration date is required';
++    else if (new Date(form.expirationDate) <= new Date()) newErrors.expirationDate = 'Date must be in the future';
++    if (!form.photo) newErrors.photo = 'Photo is required';
++    return newErrors;
++  };
++
++  const handleSubmit = () => {
++    const newErrors = validate();
++    if (Object.keys(newErrors).length > 0) {
++      setErrors(newErrors);
++    } else {
++      setSubmitted(true);
++    }
++  };
++
++  if (submitted) {
++    return (
++      <div className="success-container">
++        <div className="success-box">
++          <h2>✅ Listing Submitted!</h2>
++          <p>Your food listing is pending approval.</p>
++          <button onClick={() => navigate('/')}>Back to Dashboard</button>
++        </div>
++      </div>
++    );
++  }
++
++  return (
++    <div className="add-food-container">
++      <div className="add-food-header">
++        <button className="back-btn" onClick={() => navigate('/')}>← Back</button>
++        <h1>Add Surplus Food</h1>
++        <p>Post food donation details</p>
++      </div>
++
++      <div className="add-food-form">
++        <div className="form-group">
++          <label>Food Name *</label>
++          <input
++            type="text"
++            placeholder="e.g. Rice, Shawarma..."
++            value={form.foodName}
++            onChange={e => setForm({...form, foodName: e.target.value})}
++          />
++          {errors.foodName && <span className="error">{errors.foodName}</span>}
++        </div>
++
++        <div className="form-group">
++          <label>Category *</label>
++          <select value={form.category} onChange={e => setForm({...form, category: e.target.value})}>
++            <option value="">Select category</option>
++            <option value="meals">Meals</option>
++            <option value="bakery">Bakery</option>
++            <option value="vegetables">Vegetables</option>
++            <option value="drinks">Drinks</option>
++            <option value="other">Other</option>
++          </select>
++          {errors.category && <span className="error">{errors.category}</span>}
++        </div>
++
++        <div className="form-group">
++          <label>Quantity *</label>
++          <input
++            type="number"
++            placeholder="Number of portions"
++            value={form.quantity}
++            onChange={e => setForm({...form, quantity: e.target.value})}
++          />
++          {errors.quantity && <span className="error">{errors.quantity}</span>}
++        </div>
++
++        <div className="form-group">
++          <label>Expiration Date *</label>
++          <input
++            type="datetime-local"
++            value={form.expirationDate}
++            onChange={e => setForm({...form, expirationDate: e.target.value})}
++          />
++          {errors.expirationDate && <span className="error">{errors.expirationDate}</span>}
++        </div>
++
++        <div className="form-group">
++          <label>Upload Photo *</label>
++          <input
++            type="file"
++            accept="image/jpg, image/jpeg, image/png"
++            onChange={e => setForm({...form, photo: e.target.files[0]})}
++          />
++          {errors.photo && <span className="error">{errors.photo}</span>}
++        </div>
++
++        <button className="submit-btn" onClick={handleSubmit}>Submit Listing</button>
++      </div>
++    </div>
++  );
++}
++
++export default AddFoodListing;
+\ No newline at end of file
+Index: src/pages/Restaurant/AddFoodListing.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/Restaurant/AddFoodListing.css b/src/pages/Restaurant/AddFoodListing.css
+new file mode 100644
+--- /dev/null	(date 1775590848632)
++++ b/src/pages/Restaurant/AddFoodListing.css	(date 1775590848632)
+@@ -0,0 +1,111 @@
++.add-food-container {
++  max-width: 600px;
++  margin: 40px auto;
++  padding: 20px;
++  font-family: Arial, sans-serif;
++}
++
++.add-food-header {
++  background: linear-gradient(135deg, #2d6a4f, #74c69d);
++  color: white;
++  padding: 24px;
++  border-radius: 16px;
++  margin-bottom: 24px;
++}
++
++.add-food-header h1 {
++  margin: 8px 0 4px;
++  font-size: 24px;
++}
++
++.add-food-header p {
++  margin: 0;
++  opacity: 0.9;
++}
++
++.back-btn {
++  background: rgba(255,255,255,0.2);
++  color: white;
++  border: none;
++  padding: 6px 14px;
++  border-radius: 8px;
++  cursor: pointer;
++  font-size: 14px;
++}
++
++.add-food-form {
++  background: white;
++  padding: 24px;
++  border-radius: 16px;
++  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
++}
++
++.form-group {
++  margin-bottom: 20px;
++}
++
++.form-group label {
++  display: block;
++  font-weight: bold;
++  margin-bottom: 6px;
++  color: #333;
++}
++
++.form-group input,
++.form-group select {
++  width: 100%;
++  padding: 10px 14px;
++  border: 1px solid #ddd;
++  border-radius: 8px;
++  font-size: 15px;
++  box-sizing: border-box;
++}
++
++.error {
++  color: red;
++  font-size: 13px;
++  margin-top: 4px;
++  display: block;
++}
++
++.submit-btn {
++  width: 100%;
++  padding: 14px;
++  background: #2d6a4f;
++  color: white;
++  border: none;
++  border-radius: 10px;
++  font-size: 16px;
++  cursor: pointer;
++  margin-top: 8px;
++}
++
++.submit-btn:hover {
++  background: #1b4332;
++}
++
++.success-container {
++  display: flex;
++  justify-content: center;
++  align-items: center;
++  height: 100vh;
++}
++
++.success-box {
++  text-align: center;
++  background: white;
++  padding: 40px;
++  border-radius: 16px;
++  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
++}
++
++.success-box button {
++  margin-top: 16px;
++  padding: 12px 24px;
++  background: #2d6a4f;
++  color: white;
++  border: none;
++  border-radius: 10px;
++  cursor: pointer;
++  font-size: 15px;
++}
+\ No newline at end of file
+Index: src/pages/Administrator/PendingApprovals.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, { useState } from 'react';\r\n\r\nfunction PendingApprovals() {\r\n    const [users, setUsers] = useState([\r\n        {\r\n            id: 1,\r\n            name: 'Rayeq Restaurant',\r\n            role: 'Restaurant',\r\n            email: 'rayeq@mail.com',\r\n            date: '2026-03-01',\r\n            status: 'Pending'\r\n        },\r\n        {\r\n            id: 2,\r\n            name: 'Hope Foundation',\r\n            role: 'Charity',\r\n            email: 'hope@mail.com',\r\n            date: '2026-03-02',\r\n            status: 'Pending'\r\n        }\r\n    ]);\r\n\r\n    const handleApprove = (id) => {\r\n        setUsers(users.filter(user => user.id !== id));\r\n    };\r\n\r\n    const handleReject = (id) => {\r\n        setUsers(users.filter(user => user.id !== id));\r\n    };\r\n\r\n    return (\r\n        <div style={styles.page}>\r\n            <h1 style={styles.title}>Pending User Approvals</h1>\r\n\r\n            <div style={styles.table}>\r\n                <div style={styles.headerRow}>\r\n                    <span>Name</span>\r\n                    <span>Role</span>\r\n                    <span>Email</span>\r\n                    <span>Date</span>\r\n                    <span>Actions</span>\r\n                </div>\r\n\r\n                {users.map(user => (\r\n                    <div key={user.id} style={styles.row}>\r\n                        <span>{user.name}</span>\r\n                        <span>{user.role}</span>\r\n                        <span>{user.email}</span>\r\n                        <span>{user.date}</span>\r\n\r\n                        <div style={styles.actions}>\r\n                            <button\r\n                                style={styles.approveBtn}\r\n                                onClick={() => handleApprove(user.id)}\r\n                            >\r\n                                Approve\r\n                            </button>\r\n\r\n                            <button\r\n                                style={styles.rejectBtn}\r\n                                onClick={() => handleReject(user.id)}\r\n                            >\r\n                                Reject\r\n                            </button>\r\n                        </div>\r\n                    </div>\r\n                ))}\r\n            </div>\r\n\r\n            {users.length === 0 && (\r\n                <p style={{ marginTop: '20px' }}>No pending users \uD83C\uDF89</p>\r\n            )}\r\n        </div>\r\n    );\r\n}\r\n\r\nconst styles = {\r\n    page: {\r\n        padding: '30px',\r\n        backgroundColor: '#f5f7fb',\r\n        minHeight: '100vh'\r\n    },\r\n    title: {\r\n        color: '#1f3b64',\r\n        marginBottom: '20px'\r\n    },\r\n    table: {\r\n        backgroundColor: '#fff',\r\n        borderRadius: '10px',\r\n        padding: '20px',\r\n        boxShadow: '0 2px 8px rgba(0,0,0,0.08)'\r\n    },\r\n    headerRow: {\r\n        display: 'grid',\r\n        gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr',\r\n        fontWeight: 'bold',\r\n        marginBottom: '15px'\r\n    },\r\n    row: {\r\n        display: 'grid',\r\n        gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr',\r\n        padding: '10px 0',\r\n        borderTop: '1px solid #eee',\r\n        alignItems: 'center'\r\n    },\r\n    actions: {\r\n        display: 'flex',\r\n        gap: '10px'\r\n    },\r\n    approveBtn: {\r\n        backgroundColor: '#7fbf4d',\r\n        border: 'none',\r\n        padding: '6px 10px',\r\n        borderRadius: '6px',\r\n        color: '#fff',\r\n        cursor: 'pointer'\r\n    },\r\n    rejectBtn: {\r\n        backgroundColor: '#e74c3c',\r\n        border: 'none',\r\n        padding: '6px 10px',\r\n        borderRadius: '6px',\r\n        color: '#fff',\r\n        cursor: 'pointer'\r\n    }\r\n};\r\n\r\nexport default PendingApprovals;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/Administrator/PendingApprovals.js b/src/pages/Administrator/PendingApprovals.js
+--- a/src/pages/Administrator/PendingApprovals.js	(revision 26b414f0207548012dbf0f6243f6ae67adb995db)
++++ b/src/pages/Administrator/PendingApprovals.js	(date 1775591369949)
+@@ -5,7 +5,7 @@
+         {
+             id: 1,
+             name: 'Rayeq Restaurant',
+-            role: 'Restaurant',
++            role: 'Restaurant1',
+             email: 'rayeq@mail.com',
+             date: '2026-03-01',
+             status: 'Pending'
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+new file mode 100644
+--- /dev/null	(date 1775468515756)
++++ b/.idea/vcs.xml	(date 1775468515756)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="VcsDirectoryMappings">
++    <mapping directory="" vcs="Git" />
++  </component>
++</project>
+\ No newline at end of file
+Index: src/pages/Administrator/AdminDashboard.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from 'react';\r\n\r\nfunction AdminDashboard() {\r\n    const stats = [\r\n        { title: 'Total Restaurants', value: 24 },\r\n        { title: 'Total Charities', value: 18 },\r\n        { title: 'Food Listings', value: 56 },\r\n        { title: 'Completed Donations', value: 142 },\r\n        { title: 'Pending Approvals', value: 7 },\r\n        { title: 'Flagged Listings', value: 3 }\r\n    ];\r\n\r\n    const monthlyData = [\r\n        { month: 'Jan', donations: 12 },\r\n        { month: 'Feb', donations: 18 },\r\n        { month: 'Mar', donations: 22 },\r\n        { month: 'Apr', donations: 17 },\r\n        { month: 'May', donations: 25 },\r\n        { month: 'Jun', donations: 30 }\r\n    ];\r\n\r\n    const recentActivities = [\r\n        'Rayeq Restaurant added a new food listing.',\r\n        'Hope Foundation completed a donation pickup.',\r\n        '2 new charity accounts are waiting for approval.',\r\n        'One food listing was flagged for safety review.'\r\n    ];\r\n\r\n    return (\r\n        <div style={styles.page}>\r\n            <div style={styles.header}>\r\n                <h1 style={styles.title}>Admin Analytics Dashboard</h1>\r\n                <select style={styles.select}>\r\n                    <option>Last 7 Days</option>\r\n                    <option>Last 30 Days</option>\r\n                    <option>This Year</option>\r\n                </select>\r\n            </div>\r\n\r\n            <div style={styles.cardGrid}>\r\n                {stats.map((item, index) => (\r\n                    <div key={index} style={styles.card}>\r\n                        <h3 style={styles.cardTitle}>{item.title}</h3>\r\n                        <p style={styles.cardValue}>{item.value}</p>\r\n                    </div>\r\n                ))}\r\n            </div>\r\n\r\n            <div style={styles.sectionWrapper}>\r\n                <div style={styles.chartSection}>\r\n                    <h2 style={styles.sectionTitle}>Monthly Donations Overview</h2>\r\n                    <div style={styles.chartBox}>\r\n                        {monthlyData.map((item, index) => (\r\n                            <div key={index} style={styles.barItem}>\r\n                                <div\r\n                                    style={{\r\n                                        ...styles.bar,\r\n                                        height: `${item.donations * 5}px`\r\n                                    }}\r\n                                ></div>\r\n                                <span style={styles.barLabel}>{item.month}</span>\r\n                            </div>\r\n                        ))}\r\n                    </div>\r\n                </div>\r\n\r\n                <div style={styles.activitySection}>\r\n                    <h2 style={styles.sectionTitle}>Recent Activity</h2>\r\n                    <ul style={styles.activityList}>\r\n                        {recentActivities.map((activity, index) => (\r\n                            <li key={index} style={styles.activityItem}>\r\n                                {activity}\r\n                            </li>\r\n                        ))}\r\n                    </ul>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    );\r\n}\r\n\r\nconst styles = {\r\n    page: {\r\n        minHeight: '100vh',\r\n        backgroundColor: '#f5f7fb',\r\n        padding: '30px'\r\n    },\r\n    header: {\r\n        display: 'flex',\r\n        justifyContent: 'space-between',\r\n        alignItems: 'center',\r\n        marginBottom: '30px',\r\n        flexWrap: 'wrap',\r\n        gap: '15px'\r\n    },\r\n    title: {\r\n        color: '#1f3b64',\r\n        margin: 0\r\n    },\r\n    select: {\r\n        padding: '10px 14px',\r\n        borderRadius: '8px',\r\n        border: '1px solid #ccc',\r\n        fontSize: '14px'\r\n    },\r\n    cardGrid: {\r\n        display: 'grid',\r\n        gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',\r\n        gap: '20px',\r\n        marginBottom: '30px'\r\n    },\r\n    card: {\r\n        backgroundColor: '#ffffff',\r\n        borderRadius: '14px',\r\n        padding: '20px',\r\n        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',\r\n        textAlign: 'left'\r\n    },\r\n    cardTitle: {\r\n        fontSize: '16px',\r\n        color: '#555',\r\n        marginBottom: '10px'\r\n    },\r\n    cardValue: {\r\n        fontSize: '28px',\r\n        fontWeight: 'bold',\r\n        color: '#1f3b64',\r\n        margin: 0\r\n    },\r\n    sectionWrapper: {\r\n        display: 'grid',\r\n        gridTemplateColumns: '2fr 1fr',\r\n        gap: '20px'\r\n    },\r\n    chartSection: {\r\n        backgroundColor: '#ffffff',\r\n        borderRadius: '14px',\r\n        padding: '20px',\r\n        boxShadow: '0 2px 8px rgba(0,0,0,0.08)'\r\n    },\r\n    activitySection: {\r\n        backgroundColor: '#ffffff',\r\n        borderRadius: '14px',\r\n        padding: '20px',\r\n        boxShadow: '0 2px 8px rgba(0,0,0,0.08)'\r\n    },\r\n    sectionTitle: {\r\n        color: '#1f3b64',\r\n        marginBottom: '20px'\r\n    },\r\n    chartBox: {\r\n        display: 'flex',\r\n        alignItems: 'flex-end',\r\n        justifyContent: 'space-around',\r\n        height: '250px',\r\n        borderTop: '1px solid #eee',\r\n        paddingTop: '20px'\r\n    },\r\n    barItem: {\r\n        display: 'flex',\r\n        flexDirection: 'column',\r\n        alignItems: 'center',\r\n        gap: '10px'\r\n    },\r\n    bar: {\r\n        width: '40px',\r\n        backgroundColor: '#7fbf4d',\r\n        borderRadius: '8px 8px 0 0'\r\n    },\r\n    barLabel: {\r\n        color: '#555',\r\n        fontSize: '14px'\r\n    },\r\n    activityList: {\r\n        listStyle: 'none',\r\n        padding: 0,\r\n        margin: 0\r\n    },\r\n    activityItem: {\r\n        backgroundColor: '#f5f7fb',\r\n        padding: '14px',\r\n        borderRadius: '10px',\r\n        marginBottom: '12px',\r\n        color: '#333',\r\n        textAlign: 'left'\r\n    }\r\n};\r\n\r\nexport default AdminDashboard;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/Administrator/AdminDashboard.js b/src/pages/Administrator/AdminDashboard.js
+--- a/src/pages/Administrator/AdminDashboard.js	(revision 26b414f0207548012dbf0f6243f6ae67adb995db)
++++ b/src/pages/Administrator/AdminDashboard.js	(date 1775591369962)
+@@ -2,7 +2,7 @@
+ 
+ function AdminDashboard() {
+     const stats = [
+-        { title: 'Total Restaurants', value: 24 },
++        { title: 'Total Restaurants', value: 25 },
+         { title: 'Total Charities', value: 18 },
+         { title: 'Food Listings', value: 56 },
+         { title: 'Completed Donations', value: 142 },
+Index: src/pages/ForgotPassword.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/ForgotPassword.js b/src/pages/Auth/ForgotPassword.js
+rename from src/pages/ForgotPassword.js
+rename to src/pages/Auth/ForgotPassword.js
+--- a/src/pages/ForgotPassword.js	(revision 26b414f0207548012dbf0f6243f6ae67adb995db)
++++ b/src/pages/Auth/ForgotPassword.js	(date 1775590848624)
+@@ -1,7 +1,6 @@
+ import React, { useState } from 'react';
+ import { Link } from 'react-router-dom';
+-import './RegisterForm.css';
+-
++import '../Registration/RegisterForm.css';
+ const ForgotPassword = () => {
+   const [email, setEmail] = useState('');
+   const [submitted, setSubmitted] = useState(false);
+Index: src/pages/Login.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/Login.js b/src/pages/Auth/Login.js
+rename from src/pages/Login.js
+rename to src/pages/Auth/Login.js
+--- a/src/pages/Login.js	(revision 26b414f0207548012dbf0f6243f6ae67adb995db)
++++ b/src/pages/Auth/Login.js	(date 1775590848624)
+@@ -1,7 +1,12 @@
+ import React, { useState } from 'react';
++<<<<<<< HEAD:src/pages/Login.js
+ import { Link, useNavigate } from 'react-router-dom';
+ import './RegisterForm.css';
+ 
++=======
++import { Link } from 'react-router-dom';
++import '../Registration/RegisterForm.css';
++>>>>>>> origin/main:src/pages/Auth/Login.js
+ const Login = () => {
+   const navigate = useNavigate();
+ 
+@@ -70,6 +75,7 @@
+             <Link to="/forgot-password">Forgot password?</Link>
+           </div>
+ 
++<<<<<<< HEAD:src/pages/Login.js
+           <button type="submit" className="submit-btn">Sign In</button>
+ 
+           <div className="divider">
+@@ -81,6 +87,13 @@
+           </p>
+         </form>
+       </div>
++=======
++        <p className="footer-text">
++          Don't have an account? <Link to="/register-role" style={{ color: '#2e7d32', fontWeight: 'bold'}}>Sign Up</Link>
++        </p>
++      </form>
++    </div>
++>>>>>>> origin/main:src/pages/Auth/Login.js
+   );
+ };
+ 
+Index: .idea/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+new file mode 100644
+--- /dev/null	(date 1775324362044)
++++ b/.idea/.gitignore	(date 1775324362044)
+@@ -0,0 +1,8 @@
++# Default ignored files
++/shelf/
++/workspace.xml
++# Editor-based HTTP Client requests
++/httpRequests/
++# Datasource local storage ignored files
++/dataSources/
++/dataSources.local.xml
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+new file mode 100644
+--- /dev/null	(date 1775468515733)
++++ b/.idea/misc.xml	(date 1775468515733)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_X" default="true" project-jdk-name="openjdk-24" project-jdk-type="JavaSDK">
++    <output url="file://$PROJECT_DIR$/out" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+new file mode 100644
+--- /dev/null	(date 1775468515720)
++++ b/.idea/modules.xml	(date 1775468515720)
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ProjectModuleManager">
++    <modules>
++      <module fileurl="file://$PROJECT_DIR$/.idea/Medad-Frontend.iml" filepath="$PROJECT_DIR$/.idea/Medad-Frontend.iml" />
++    </modules>
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/Medad-Frontend.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/Medad-Frontend.iml b/.idea/Medad-Frontend.iml
+new file mode 100644
+--- /dev/null	(date 1775468515697)
++++ b/.idea/Medad-Frontend.iml	(date 1775468515697)
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<module type="JAVA_MODULE" version="4">
++  <component name="NewModuleRootManager" inherit-compiler-output="true">
++    <exclude-output />
++    <content url="file://$MODULE_DIR$" />
++    <orderEntry type="inheritedJdk" />
++    <orderEntry type="sourceFolder" forTests="false" />
++  </component>
++</module>
+\ No newline at end of file
+Index: src/pages/RegisterRestaurant.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/RegisterRestaurant.js b/src/pages/Registration/RegisterRestaurant.js
+rename from src/pages/RegisterRestaurant.js
+rename to src/pages/Registration/RegisterRestaurant.js
+--- a/src/pages/RegisterRestaurant.js	(revision 26b414f0207548012dbf0f6243f6ae67adb995db)
++++ b/src/pages/Registration/RegisterRestaurant.js	(date 1775590848632)
+@@ -44,7 +44,7 @@
+       setError(validationError);
+       return;
+     }
+-
++    
+     console.log("Success!", formData);
+     alert("Account created successfully!");
+   };
+Index: src/pages/Restaurant/RestaurantDashboard.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/Restaurant/RestaurantDashboard.js b/src/pages/Restaurant/RestaurantDashboard.js
+new file mode 100644
+--- /dev/null	(date 1775590848642)
++++ b/src/pages/Restaurant/RestaurantDashboard.js	(date 1775590848642)
+@@ -0,0 +1,39 @@
++import React from 'react';
++import { useNavigate } from 'react-router-dom';
++import './RestaurantDashboard.css';
++
++function RestaurantDashboard() {
++  const navigate = useNavigate();
++
++  return (
++    <div className="dashboard-container">
++      <div className="dashboard-header">
++        <h1>Welcome, Restaurant 👋</h1>
++        <p>Manage your food donations</p>
++      </div>
++
++      <div className="stats-cards">
++        <div className="card">
++          <h3>2</h3>
++          <p>Active Listings</p>
++        </div>
++        <div className="card">
++          <h3>3</h3>
++          <p>Total Donations</p>
++        </div>
++        <div className="card">
++          <h3>1</h3>
++          <p>Pending Requests</p>
++        </div>
++      </div>
++
++      <div className="dashboard-buttons">
++        <button onClick={() => navigate('/add-food')}>+ Add Food</button>
++        <button onClick={() => navigate('/my-listings')}>My Listings</button>
++        <button onClick={() => navigate('/requests')}>Charity Requests</button>
++      </div>
++    </div>
++  );
++}
++
++export default RestaurantDashboard;
+\ No newline at end of file
+Index: src/pages/Restaurant/RestaurantDashboard.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/Restaurant/RestaurantDashboard.css b/src/pages/Restaurant/RestaurantDashboard.css
+new file mode 100644
+--- /dev/null	(date 1775590848640)
++++ b/src/pages/Restaurant/RestaurantDashboard.css	(date 1775590848640)
+@@ -0,0 +1,71 @@
++.dashboard-container {
++  max-width: 800px;
++  margin: 40px auto;
++  padding: 20px;
++  font-family: Arial, sans-serif;
++}
++
++.dashboard-header {
++  background: linear-gradient(135deg, #2d6a4f, #74c69d);
++  color: white;
++  padding: 30px;
++  border-radius: 16px;
++  margin-bottom: 30px;
++}
++
++.dashboard-header h1 {
++  margin: 0;
++  font-size: 28px;
++}
++
++.dashboard-header p {
++  margin: 8px 0 0;
++  opacity: 0.9;
++}
++
++.stats-cards {
++  display: flex;
++  gap: 20px;
++  margin-bottom: 30px;
++}
++
++.card {
++  flex: 1;
++  background: white;
++  border: 1px solid #e0e0e0;
++  border-radius: 12px;
++  padding: 20px;
++  text-align: center;
++  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
++}
++
++.card h3 {
++  font-size: 36px;
++  color: #2d6a4f;
++  margin: 0;
++}
++
++.card p {
++  color: #666;
++  margin: 8px 0 0;
++}
++
++.dashboard-buttons {
++  display: flex;
++  gap: 16px;
++}
++
++.dashboard-buttons button {
++  flex: 1;
++  padding: 14px;
++  background: #2d6a4f;
++  color: white;
++  border: none;
++  border-radius: 10px;
++  font-size: 16px;
++  cursor: pointer;
++}
++
++.dashboard-buttons button:hover {
++  background: #1b4332;
++}
+\ No newline at end of file
+Index: src/pages/Restaurant/PickupConfirmation.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/Restaurant/PickupConfirmation.js b/src/pages/Restaurant/PickupConfirmation.js
+new file mode 100644
+--- /dev/null	(date 1775590848640)
++++ b/src/pages/Restaurant/PickupConfirmation.js	(date 1775590848640)
+@@ -0,0 +1,109 @@
++import React, { useState } from 'react';
++import { useNavigate } from 'react-router-dom';
++import './PickupConfirmation.css';
++
++function PickupConfirmation() {
++  const navigate = useNavigate();
++  const [confirmed, setConfirmed] = useState(false);
++  const [checked, setChecked] = useState({ identity: false, quantity: false, condition: false });
++
++  const allChecked = Object.values(checked).every(v => v === true);
++
++  const handleConfirm = () => {
++    if (allChecked) setConfirmed(true);
++  };
++
++  if (confirmed) {
++    return (
++      <div className="success-container">
++        <div className="success-box">
++          <div className="success-icon">✅</div>
++          <h2>Pickup Confirmed!</h2>
++          <p>Donation has been saved to your history.</p>
++          <button onClick={() => navigate('/')}>Back to Dashboard</button>
++        </div>
++      </div>
++    );
++  }
++
++  return (
++    <div className="pickup-container">
++      <div className="pickup-header">
++        <button className="back-btn" onClick={() => navigate('/requests')}>← Back</button>
++        <h1>Pickup Confirmation</h1>
++        <p>Confirm successful food collection</p>
++      </div>
++
++      <div className="order-details">
++        <h2>Order Details</h2>
++        <div className="detail-row">
++          <span>Food Item:</span>
++          <strong>Pizza</strong>
++        </div>
++        <div className="detail-row">
++          <span>Quantity:</span>
++          <strong>20 units</strong>
++        </div>
++        <div className="detail-row">
++          <span>Pickup Date:</span>
++          <strong>2026-04-08</strong>
++        </div>
++        <div className="detail-row">
++          <span>Charity:</span>
++          <strong>Aamal Foundation</strong>
++        </div>
++      </div>
++
++      <div className="driver-details">
++        <h2>Driver Information</h2>
++        <div className="driver-card">
++          <div className="driver-avatar">👤</div>
++          <div>
++            <h3>Ahmed Hassan</h3>
++            <p>Representative - Aamal Foundation</p>
++            <p>📞 +966 50 123 4567</p>
++            <p>📍 2.3 km away</p>
++          </div>
++        </div>
++      </div>
++
++      <div className="checklist">
++        <h2>✅ Handover Checklist</h2>
++        <label className="check-item">
++          <input
++            type="checkbox"
++            checked={checked.identity}
++            onChange={() => setChecked({...checked, identity: !checked.identity})}
++          />
++          Verify driver identity
++        </label>
++        <label className="check-item">
++          <input
++            type="checkbox"
++            checked={checked.quantity}
++            onChange={() => setChecked({...checked, quantity: !checked.quantity})}
++          />
++          Check quantity matches
++        </label>
++        <label className="check-item">
++          <input
++            type="checkbox"
++            checked={checked.condition}
++            onChange={() => setChecked({...checked, condition: !checked.condition})}
++          />
++          Confirm food condition is good
++        </label>
++      </div>
++
++      <button
++        className={`confirm-btn ${!allChecked ? 'disabled' : ''}`}
++        onClick={handleConfirm}
++        disabled={!allChecked}
++      >
++        Confirm Pickup
++      </button>
++    </div>
++  );
++}
++
++export default PickupConfirmation;
+\ No newline at end of file
+Index: src/pages/Restaurant/PickupConfirmation.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/Restaurant/PickupConfirmation.css b/src/pages/Restaurant/PickupConfirmation.css
+new file mode 100644
+--- /dev/null	(date 1775590848638)
++++ b/src/pages/Restaurant/PickupConfirmation.css	(date 1775590848638)
+@@ -0,0 +1,132 @@
++.pickup-container {
++  max-width: 600px;
++  margin: 40px auto;
++  padding: 20px;
++  font-family: Arial, sans-serif;
++}
++
++.pickup-header {
++  background: linear-gradient(135deg, #2d6a4f, #74c69d);
++  color: white;
++  padding: 24px;
++  border-radius: 16px;
++  margin-bottom: 24px;
++}
++
++.pickup-header h1 { margin: 8px 0 4px; font-size: 24px; }
++.pickup-header p { margin: 0; opacity: 0.9; }
++
++.back-btn {
++  background: rgba(255,255,255,0.2);
++  color: white;
++  border: none;
++  padding: 6px 14px;
++  border-radius: 8px;
++  cursor: pointer;
++}
++
++.order-details, .driver-details, .checklist {
++  background: white;
++  border-radius: 12px;
++  padding: 20px 24px;
++  margin-bottom: 20px;
++  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
++}
++
++.order-details h2, .driver-details h2, .checklist h2 {
++  margin-top: 0;
++  color: #1b4332;
++  font-size: 18px;
++}
++
++.detail-row {
++  display: flex;
++  justify-content: space-between;
++  padding: 8px 0;
++  border-bottom: 1px solid #f0f0f0;
++  color: #555;
++}
++
++.detail-row:last-child { border-bottom: none; }
++
++.driver-card {
++  display: flex;
++  gap: 16px;
++  align-items: center;
++}
++
++.driver-avatar {
++  font-size: 40px;
++  background: #d8f3dc;
++  border-radius: 50%;
++  width: 60px;
++  height: 60px;
++  display: flex;
++  align-items: center;
++  justify-content: center;
++}
++
++.driver-card h3 { margin: 0 0 4px; color: #1b4332; }
++.driver-card p { margin: 4px 0; color: #555; font-size: 14px; }
++
++.check-item {
++  display: flex;
++  align-items: center;
++  gap: 10px;
++  padding: 10px 0;
++  border-bottom: 1px solid #f0f0f0;
++  cursor: pointer;
++  font-size: 15px;
++  color: #333;
++}
++
++.check-item:last-child { border-bottom: none; }
++.check-item input { width: 18px; height: 18px; cursor: pointer; }
++
++.confirm-btn {
++  width: 100%;
++  padding: 16px;
++  background: #2d6a4f;
++  color: white;
++  border: none;
++  border-radius: 12px;
++  font-size: 16px;
++  cursor: pointer;
++  font-weight: bold;
++}
++
++.confirm-btn.disabled {
++  background: #ccc;
++  cursor: not-allowed;
++}
++
++.confirm-btn:hover:not(.disabled) { background: #1b4332; }
++
++.success-container {
++  display: flex;
++  justify-content: center;
++  align-items: center;
++  height: 100vh;
++}
++
++.success-box {
++  text-align: center;
++  background: white;
++  padding: 40px;
++  border-radius: 16px;
++  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
++}
++
++.success-icon { font-size: 60px; margin-bottom: 16px; }
++.success-box h2 { color: #2d6a4f; margin-bottom: 8px; }
++.success-box p { color: #666; margin-bottom: 20px; }
++
++.success-box button {
++  padding: 12px 28px;
++  background: #2d6a4f;
++  color: white;
++  border: none;
++  border-radius: 10px;
++  cursor: pointer;
++  font-size: 15px;
++}
+\ No newline at end of file
+Index: src/pages/Restaurant/MyListings.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/Restaurant/MyListings.js b/src/pages/Restaurant/MyListings.js
+new file mode 100644
+--- /dev/null	(date 1775590848638)
++++ b/src/pages/Restaurant/MyListings.js	(date 1775590848638)
+@@ -0,0 +1,87 @@
++import React, { useState } from 'react';
++import { useNavigate } from 'react-router-dom';
++import './MyListings.css';
++
++const initialListings = [
++  { id: 1, name: 'Pizza', category: 'Meals', quantity: 20, expiration: '2026-04-10', status: 'Active' },
++  { id: 2, name: 'Fresh Salads', category: 'Vegetables', quantity: 15, expiration: '2026-04-08', status: 'Active' },
++  { id: 3, name: 'Lasagna', quantity: 30, category: 'Meals', expiration: '2026-02-26', status: 'Completed' },
++];
++
++function MyListings() {
++  const navigate = useNavigate();
++  const [listings, setListings] = useState(initialListings);
++  const [editItem, setEditItem] = useState(null);
++
++  const handleDelete = (id) => {
++    setListings(listings.filter(l => l.id !== id));
++  };
++
++  const handleEdit = (item) => {
++    setEditItem({...item});
++  };
++
++  const handleSave = () => {
++    setListings(listings.map(l => l.id === editItem.id ? editItem : l));
++    setEditItem(null);
++  };
++
++  return (
++    <div className="listings-container">
++      <div className="listings-header">
++        <button className="back-btn" onClick={() => navigate('/')}>← Back</button>
++        <h1>My Listings</h1>
++        <p>Manage your food donations</p>
++      </div>
++
++      <button className="add-btn" onClick={() => navigate('/add-food')}>+ Add New Food</button>
++
++      <div className="listings-list">
++        {listings.map(item => (
++          <div key={item.id} className={`listing-card ${item.status === 'Completed' ? 'completed' : ''}`}>
++            <div className="listing-info">
++              <h3>{item.name}</h3>
++              <p>📦 {item.quantity} units &nbsp;|&nbsp; 🏷️ {item.category}</p>
++              <p>📅 Expires: {item.expiration}</p>
++              <span className={`status ${item.status === 'Active' ? 'active' : 'done'}`}>
++                {item.status}
++              </span>
++            </div>
++            {item.status === 'Active' && (
++              <div className="listing-actions">
++                <button className="edit-btn" onClick={() => handleEdit(item)}>Edit</button>
++                <button className="delete-btn" onClick={() => handleDelete(item.id)}>Delete</button>
++              </div>
++            )}
++          </div>
++        ))}
++      </div>
++
++      {editItem && (
++        <div className="modal-overlay">
++          <div className="modal">
++            <h2>Edit Listing</h2>
++            <div className="form-group">
++              <label>Food Name</label>
++              <input value={editItem.name} onChange={e => setEditItem({...editItem, name: e.target.value})} />
++            </div>
++            <div className="form-group">
++              <label>Quantity</label>
++              <input type="number" value={editItem.quantity} onChange={e => setEditItem({...editItem, quantity: e.target.value})} />
++            </div>
++            <div className="form-group">
++              <label>Expiration Date</label>
++              <input type="date" value={editItem.expiration} onChange={e => setEditItem({...editItem, expiration: e.target.value})} />
++            </div>
++            <div className="modal-buttons">
++              <button className="save-btn" onClick={handleSave}>Save</button>
++              <button className="cancel-btn" onClick={() => setEditItem(null)}>Cancel</button>
++            </div>
++          </div>
++        </div>
++      )}
++    </div>
++  );
++}
++
++export default MyListings;
+\ No newline at end of file
+Index: src/pages/Restaurant/MyListings.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/Restaurant/MyListings.css b/src/pages/Restaurant/MyListings.css
+new file mode 100644
+--- /dev/null	(date 1775590848636)
++++ b/src/pages/Restaurant/MyListings.css	(date 1775590848636)
+@@ -0,0 +1,139 @@
++.listings-container {
++  max-width: 700px;
++  margin: 40px auto;
++  padding: 20px;
++  font-family: Arial, sans-serif;
++}
++
++.listings-header {
++  background: linear-gradient(135deg, #2d6a4f, #74c69d);
++  color: white;
++  padding: 24px;
++  border-radius: 16px;
++  margin-bottom: 20px;
++}
++
++.listings-header h1 { margin: 8px 0 4px; font-size: 24px; }
++.listings-header p { margin: 0; opacity: 0.9; }
++
++.back-btn {
++  background: rgba(255,255,255,0.2);
++  color: white;
++  border: none;
++  padding: 6px 14px;
++  border-radius: 8px;
++  cursor: pointer;
++}
++
++.add-btn {
++  background: #2d6a4f;
++  color: white;
++  border: none;
++  padding: 10px 20px;
++  border-radius: 10px;
++  cursor: pointer;
++  font-size: 15px;
++  margin-bottom: 20px;
++}
++
++.listing-card {
++  background: white;
++  border: 1px solid #e0e0e0;
++  border-radius: 12px;
++  padding: 16px 20px;
++  margin-bottom: 16px;
++  display: flex;
++  justify-content: space-between;
++  align-items: center;
++  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
++}
++
++.listing-card.completed { opacity: 0.6; }
++
++.listing-info h3 { margin: 0 0 6px; color: #1b4332; }
++.listing-info p { margin: 4px 0; color: #555; font-size: 14px; }
++
++.status {
++  display: inline-block;
++  padding: 4px 12px;
++  border-radius: 20px;
++  font-size: 13px;
++  font-weight: bold;
++  margin-top: 6px;
++}
++
++.status.active { background: #d8f3dc; color: #2d6a4f; }
++.status.done { background: #e0e0e0; color: #666; }
++
++.listing-actions { display: flex; gap: 10px; }
++
++.edit-btn {
++  background: #74c69d;
++  color: white;
++  border: none;
++  padding: 8px 16px;
++  border-radius: 8px;
++  cursor: pointer;
++}
++
++.delete-btn {
++  background: #e63946;
++  color: white;
++  border: none;
++  padding: 8px 16px;
++  border-radius: 8px;
++  cursor: pointer;
++}
++
++.modal-overlay {
++  position: fixed;
++  top: 0; left: 0;
++  width: 100%; height: 100%;
++  background: rgba(0,0,0,0.4);
++  display: flex;
++  justify-content: center;
++  align-items: center;
++}
++
++.modal {
++  background: white;
++  padding: 30px;
++  border-radius: 16px;
++  width: 400px;
++}
++
++.modal h2 { margin-top: 0; color: #1b4332; }
++
++.form-group { margin-bottom: 16px; }
++.form-group label { display: block; font-weight: bold; margin-bottom: 6px; }
++.form-group input {
++  width: 100%;
++  padding: 10px;
++  border: 1px solid #ddd;
++  border-radius: 8px;
++  box-sizing: border-box;
++}
++
++.modal-buttons { display: flex; gap: 12px; margin-top: 20px; }
++
++.save-btn {
++  flex: 1;
++  padding: 12px;
++  background: #2d6a4f;
++  color: white;
++  border: none;
++  border-radius: 10px;
++  cursor: pointer;
++  font-size: 15px;
++}
++
++.cancel-btn {
++  flex: 1;
++  padding: 12px;
++  background: #e0e0e0;
++  color: #333;
++  border: none;
++  border-radius: 10px;
++  cursor: pointer;
++  font-size: 15px;
++}
+\ No newline at end of file
+Index: src/pages/Restaurant/CharityRequests.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/Restaurant/CharityRequests.js b/src/pages/Restaurant/CharityRequests.js
+new file mode 100644
+--- /dev/null	(date 1775590848636)
++++ b/src/pages/Restaurant/CharityRequests.js	(date 1775590848636)
+@@ -0,0 +1,82 @@
++import React, { useState } from 'react';
++import { useNavigate } from 'react-router-dom';
++import './CharityRequests.css';
++
++const initialRequests = [
++  { id: 1, charity: 'Aamal Foundation', food: 'Pizza', quantity: 20, pickup: '2026-04-08', distance: '2.3 km', status: 'Pending' },
++  { id: 2, charity: 'Al Noor Charity', food: 'Fresh Salads', quantity: 15, pickup: '2026-04-09', distance: '1.8 km', status: 'Pending' },
++  { id: 3, charity: 'Mercy Kitchen', food: 'Lasagna', quantity: 10, pickup: '2026-04-07', distance: '3.1 km', status: 'Accepted' },
++];
++
++function CharityRequests() {
++  const navigate = useNavigate();
++  const [requests, setRequests] = useState(initialRequests);
++
++  const handleAccept = (id) => {
++    setRequests(requests.map(r => r.id === id ? {...r, status: 'Accepted'} : r));
++  };
++
++  const handleReject = (id) => {
++    setRequests(requests.map(r => r.id === id ? {...r, status: 'Rejected'} : r));
++  };
++
++  const pending = requests.filter(r => r.status === 'Pending');
++  const others = requests.filter(r => r.status !== 'Pending');
++
++  return (
++    <div className="requests-container">
++      <div className="requests-header">
++        <button className="back-btn" onClick={() => navigate('/')}>← Back</button>
++        <h1>Charity Requests</h1>
++        <p>{pending.length} Pending Requests</p>
++      </div>
++
++      {pending.length > 0 && (
++        <div className="section">
++          <h2>⏳ Pending</h2>
++          {pending.map(req => (
++            <div key={req.id} className="request-card pending">
++              <div className="request-info">
++                <h3>{req.charity}</h3>
++                <p>🍱 Requesting: {req.food} - {req.quantity} units</p>
++                <p>📅 Pickup: {req.pickup}</p>
++                <p>📍 {req.distance} away</p>
++              </div>
++              <div className="request-actions">
++                <button className="accept-btn" onClick={() => handleAccept(req.id)}>✓ Accept</button>
++                <button className="reject-btn" onClick={() => handleReject(req.id)}>✗ Decline</button>
++              </div>
++            </div>
++          ))}
++        </div>
++      )}
++
++      {others.length > 0 && (
++        <div className="section">
++          <h2>📋 Previous</h2>
++          {others.map(req => (
++            <div key={req.id} className={`request-card ${req.status === 'Accepted' ? 'accepted' : 'rejected'}`}>
++              <div className="request-info">
++                <h3>{req.charity}</h3>
++                <p>🍱 {req.food} - {req.quantity} units</p>
++                <p>📅 Pickup: {req.pickup}</p>
++              </div>
++              <div>
++                <span className={`badge ${req.status === 'Accepted' ? 'badge-green' : 'badge-red'}`}>
++                  {req.status === 'Accepted' ? '✓ Accepted' : '✗ Declined'}
++                </span>
++                {req.status === 'Accepted' && (
++                  <button className="confirm-btn" onClick={() => navigate('/pickup-confirm')}>
++                    Confirm Pickup
++                  </button>
++                )}
++              </div>
++            </div>
++          ))}
++        </div>
++      )}
++    </div>
++  );
++}
++
++export default CharityRequests;
+\ No newline at end of file
+Index: src/pages/Restaurant/CharityRequests.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/pages/Restaurant/CharityRequests.css b/src/pages/Restaurant/CharityRequests.css
+new file mode 100644
+--- /dev/null	(date 1775590848636)
++++ b/src/pages/Restaurant/CharityRequests.css	(date 1775590848636)
+@@ -0,0 +1,95 @@
++.requests-container {
++  max-width: 700px;
++  margin: 40px auto;
++  padding: 20px;
++  font-family: Arial, sans-serif;
++}
++
++.requests-header {
++  background: linear-gradient(135deg, #2d6a4f, #74c69d);
++  color: white;
++  padding: 24px;
++  border-radius: 16px;
++  margin-bottom: 24px;
++}
++
++.requests-header h1 { margin: 8px 0 4px; font-size: 24px; }
++.requests-header p { margin: 0; opacity: 0.9; }
++
++.back-btn {
++  background: rgba(255,255,255,0.2);
++  color: white;
++  border: none;
++  padding: 6px 14px;
++  border-radius: 8px;
++  cursor: pointer;
++}
++
++.section h2 {
++  color: #1b4332;
++  margin-bottom: 12px;
++}
++
++.request-card {
++  background: white;
++  border-radius: 12px;
++  padding: 16px 20px;
++  margin-bottom: 16px;
++  display: flex;
++  justify-content: space-between;
++  align-items: center;
++  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
++  border-left: 4px solid #ccc;
++}
++
++.request-card.pending { border-left-color: #f4a261; }
++.request-card.accepted { border-left-color: #2d6a4f; }
++.request-card.rejected { border-left-color: #e63946; opacity: 0.7; }
++
++.request-info h3 { margin: 0 0 6px; color: #1b4332; }
++.request-info p { margin: 4px 0; color: #555; font-size: 14px; }
++
++.request-actions { display: flex; flex-direction: column; gap: 8px; }
++
++.accept-btn {
++  background: #2d6a4f;
++  color: white;
++  border: none;
++  padding: 8px 20px;
++  border-radius: 8px;
++  cursor: pointer;
++  font-size: 14px;
++}
++
++.reject-btn {
++  background: #e63946;
++  color: white;
++  border: none;
++  padding: 8px 20px;
++  border-radius: 8px;
++  cursor: pointer;
++  font-size: 14px;
++}
++
++.badge {
++  display: inline-block;
++  padding: 6px 14px;
++  border-radius: 20px;
++  font-size: 13px;
++  font-weight: bold;
++}
++
++.badge-green { background: #d8f3dc; color: #2d6a4f; }
++.badge-red { background: #fde8e8; color: #e63946; }
++
++.confirm-btn {
++  display: block;
++  margin-top: 8px;
++  background: #2d6a4f;
++  color: white;
++  border: none;
++  padding: 8px 16px;
++  border-radius: 8px;
++  cursor: pointer;
++  font-size: 13px;
++}
+\ No newline at end of file
+diff --git a/src/pages/RegisterRole.js b/src/pages/Auth/RegisterRole.js
+rename from src/pages/RegisterRole.js
+rename to src/pages/Auth/RegisterRole.js
+diff --git a/src/pages/RegisterRole.css b/src/pages/Auth/RegisterRole.css
+rename from src/pages/RegisterRole.css
+rename to src/pages/Auth/RegisterRole.css
+diff --git a/src/pages/MainWelcome.js b/src/pages/Home/MainWelcome.js
+rename from src/pages/MainWelcome.js
+rename to src/pages/Home/MainWelcome.js
+diff --git a/src/pages/MainWelcome.css b/src/pages/Home/MainWelcome.css
+rename from src/pages/MainWelcome.css
+rename to src/pages/Home/MainWelcome.css
+diff --git a/src/pages/RegisterForm.css b/src/pages/Registration/RegisterForm.css
+rename from src/pages/RegisterForm.css
+rename to src/pages/Registration/RegisterForm.css
+diff --git a/src/pages/RegisterCharity.js b/src/pages/Registration/RegisterCharity.js
+rename from src/pages/RegisterCharity.js
+rename to src/pages/Registration/RegisterCharity.js

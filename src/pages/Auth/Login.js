@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
+<<<<<<< HEAD:src/pages/Login.js
 import { Link, useNavigate } from 'react-router-dom';
 import './RegisterForm.css';
 
+=======
+import { Link } from 'react-router-dom';
+import '../Registration/RegisterForm.css';
+>>>>>>> 648d4062996b7d8db2bc7ad3c6d9a9b375c69b54:src/pages/Auth/Login.js
 const Login = () => {
   const navigate = useNavigate();
 
@@ -70,6 +75,7 @@ const Login = () => {
             <Link to="/forgot-password">Forgot password?</Link>
           </div>
 
+<<<<<<< HEAD:src/pages/Login.js
           <button type="submit" className="submit-btn">Sign In</button>
 
           <div className="divider">
@@ -81,6 +87,13 @@ const Login = () => {
           </p>
         </form>
       </div>
+=======
+        <p className="footer-text">
+          Don't have an account? <Link to="/register-role" style={{ color: '#2e7d32', fontWeight: 'bold'}}>Sign Up</Link>
+        </p>
+      </form>
+    </div>
+>>>>>>> 648d4062996b7d8db2bc7ad3c6d9a9b375c69b54:src/pages/Auth/Login.js
   );
 };
 
