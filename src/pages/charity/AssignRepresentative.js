@@ -101,7 +101,7 @@ const AssignRepresentative = () => {
         </div>
 
         <div className="input-group">
-          <label>Scheduled Pickup Time *</label>
+          <label>Scheduled Pickup Time * (Format: YYYY-MM-DD HH:MM)</label>
           <input
             type="datetime-local"
             name="pickupTime"

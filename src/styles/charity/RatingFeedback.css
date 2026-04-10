@@ -66,3 +66,70 @@
 .tag-btn:hover {
   background: #e8f5e9;
 }
+/* Mobile Phones - up to 600px */
+@media (max-width: 600px) {
+  .rating-container {
+    padding: 15px;
+  }
+
+  .rating-card {
+    padding: 20px 15px;
+  }
+
+  .rating-card h2 {
+    font-size: 1.3rem;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+  }
+
+  .star {
+    font-size: 30px;
+  }
+
+  .tags-container {
+    gap: 8px;
+  }
+
+  .tag-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .feedback-section textarea {
+    font-size: 14px;
+  }
+
+  .submit-rating-btn {
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .thankyou-card {
+    padding: 30px 20px;
+  }
+
+  .thankyou-icon {
+    font-size: 50px;
+  }
+
+  .thankyou-card h2 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Tablets - 601px to 900px */
+@media (min-width: 601px) and (max-width: 900px) {
+  .rating-card {
+    max-width: 550px;
+    margin: 0 auto;
+  }
+}
+
+/* Laptops - 901px and above */
+@media (min-width: 901px) {
+  .rating-card {
+    max-width: 600px;
+  }
+}

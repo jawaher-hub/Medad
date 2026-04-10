@@ -175,3 +175,61 @@
     justify-content: center;
   }
 }
+
+/* Mobile Phones - up to 600px */
+@media (max-width: 600px) {
+  .confirm-container {
+    padding: 15px;
+  }
+
+  .confirm-card {
+    padding: 20px 15px;
+  }
+
+  .confirm-card h2 {
+    font-size: 1.3rem;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+  }
+
+  .photo-preview-grid {
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .photo-preview,
+  .upload-placeholder {
+    width: 80px;
+    height: 80px;
+  }
+
+  .upload-placeholder span {
+    font-size: 24px;
+  }
+
+  .upload-placeholder p {
+    font-size: 10px;
+  }
+
+  .submit-btn {
+    padding: 12px;
+    font-size: 16px;
+  }
+}
+
+/* Tablets - 601px to 900px */
+@media (min-width: 601px) and (max-width: 900px) {
+  .confirm-card {
+    max-width: 550px;
+    margin: 0 auto;
+  }
+}
+
+/* Laptops - 901px and above */
+@media (min-width: 901px) {
+  .confirm-card {
+    max-width: 600px;
+  }
+}
