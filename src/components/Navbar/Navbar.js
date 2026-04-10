@@ -32,7 +32,6 @@ const Navbar = () => {
           </>
         ) : (
           <>
-            {userRole === 'restaurant' && <li><Link to="/restaurant/my-listings" className="nav-item">My Listings</Link></li>}
             {userRole === 'charity' && <li><Link to="/browse" className="nav-item">Browse</Link></li>}
             
             {userRole !== 'admin' && (
