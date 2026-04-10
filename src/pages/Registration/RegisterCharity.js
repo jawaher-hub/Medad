@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import './RegisterForm.css';
-
+import { useNavigate } from 'react-router-dom';
 const RegisterCharity = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     charityName: '',
     city: '',
@@ -48,8 +49,10 @@ const RegisterCharity = () => {
       return;
     }
 
-    console.log("Charity Data:", formData);
-    alert("Registration submitted! an admin will review your registration soon");
+    localStorage.setItem('userRole', 'charity');
+    window.dispatchEvent(new Event("storage"));
+    alert("Registration submitted! please complete your profile.");
+    navigate('/settings');
   };
 
   return (

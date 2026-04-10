@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './RegisterForm.css';
 
 const RegisterRestaurant = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     restaurantName: '',
     email: '',
@@ -45,10 +47,11 @@ const RegisterRestaurant = () => {
       return;
     }
     
-    console.log("Success!", formData);
-    alert("Account created successfully!");
-  };
-
+    localStorage.setItem('userRole', 'restaurant'); 
+      window.dispatchEvent(new Event("storage"));
+      alert("Account created successfully! please complete your profile");
+      navigate('/settings'); 
+    };
   return (
     <div className="form-container">
       <form className="auth-form" onSubmit={handleSubmit}>

@@ -14,30 +14,32 @@ const Login = () => {
     };
 
     const handleLogin = (e) => {
-        e.preventDefault();
+      e.preventDefault();
 
-        if (!credentials.email.includes('@')) {
-            setError('Please enter a valid email address');
-            return;
-        }
+      if (!credentials.email.includes('@')) {
+        setError('Please enter a valid email address');
+        return;
+      }
+      let role = '';
+      if (credentials.email === 'admin@medad.com' && credentials.password === '123456') {
+        role = 'admin';
+      } else if (credentials.email === 'rest@medad.com' && credentials.password === '123456') {
+        role = 'restaurant';
+      } else if (credentials.email === 'charity@medad.com' && credentials.password === '123456') {
+        role = 'charity';
+      }
+      if (role) {
+        localStorage.setItem('userRole', role);
 
-        if (
-            credentials.email === 'admin@medad.com' &&
-            credentials.password === '123456'
-        ) {
-            navigate('/admin/dashboard');
-            return;
-        }
-        if (credentials.email === 'rest@medad.com' && credentials.password === '123456') {
-            navigate('/restaurant/dashboard');
-            return;
-        }
-        if (credentials.email === 'charity@medad.com' && credentials.password === '123456') {
-            navigate('/browse'); 
-            return;
-        }
+        window.dispatchEvent(new Event("storage")); 
+
+        if (role === 'admin') navigate('/admin/dashboard');
+        else if (role === 'restaurant') navigate('/restaurant/dashboard');
+        else navigate('/browse');       
+      } else {
         setError('Invalid email or password');
-    };
+      }
+  };
 
     return (
         <div className="form-container">

@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
-
+import Settings from './pages/Auth/Settings';
 import MainWelcome from './pages/Home/MainWelcome';
 import Login from './pages/Auth/Login';
 import ForgotPassword from './pages/Auth/ForgotPassword';
@@ -41,7 +41,7 @@ function App() {
             <Route path="/register-role" element={<RegisterRole />} />
             <Route path="/register-restaurant" element={<RegisterRestaurant />} />
             <Route path="/register-charity" element={<RegisterCharity />} />
-
+            <Route path="/settings" element={<Settings />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/pending-approvals" element={<PendingApprovals />} />
             <Route path="/admin/safety-monitor" element={<SafetyMonitor />} />
