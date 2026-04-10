@@ -13,3 +13,62 @@
 .info-box strong {
   color: #2e7d32;
 }
+
+/* Mobile Phones - up to 600px */
+@media (max-width: 600px) {
+  .form-container {
+    padding: 15px;
+  }
+
+  .auth-form {
+    padding: 20px 15px;
+    width: 100%;
+  }
+
+  .auth-form h2 {
+    font-size: 1.3rem;
+  }
+
+  .auth-form p {
+    font-size: 0.85rem;
+  }
+
+  .info-box {
+    padding: 12px;
+    margin-bottom: 20px;
+  }
+
+  .info-box p {
+    font-size: 13px;
+  }
+
+  .input-group label {
+    font-size: 13px;
+  }
+
+  .input-group input,
+  .input-group textarea {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .submit-btn {
+    padding: 12px;
+    font-size: 16px;
+  }
+}
+
+/* Tablets - 601px to 900px */
+@media (min-width: 601px) and (max-width: 900px) {
+  .auth-form {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+}
+
+/* Laptops - 901px and above */
+@media (min-width: 901px) {
+  .auth-form {
+    max-width: 550px;
+  }
+}

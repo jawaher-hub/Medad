@@ -155,3 +155,90 @@
 .donation-card-image.loading {
   opacity: 0.6;
 }
+
+/* Mobile Phones (portrait) - up to 600px */
+@media (max-width: 600px) {
+  .browse-container {
+    padding: 15px 10px;
+  }
+
+  .browse-header {
+    padding: 20px 15px;
+  }
+
+  .browse-title {
+    font-size: 1.5rem;
+  }
+
+  .browse-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .browse-search-input {
+    padding: 12px 15px;
+    font-size: 14px;
+  }
+
+  .category-chip {
+    padding: 6px 14px;
+    font-size: 12px;
+  }
+
+  .browse-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .donation-card-image {
+    height: 150px;
+  }
+
+  .donation-card-title {
+    font-size: 16px;
+  }
+
+  .donation-card-restaurant {
+    font-size: 12px;
+  }
+
+  .donation-card-details {
+    font-size: 11px;
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+
+/* Tablets (portrait) - 601px to 900px */
+@media (min-width: 601px) and (max-width: 900px) {
+  .browse-container {
+    padding: 20px 15px;
+  }
+
+  .browse-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .browse-title {
+    font-size: 1.8rem;
+  }
+}
+
+/* Laptops/Desktops - 901px and above (default styles already work) */
+@media (min-width: 901px) {
+  .browse-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Large Screens - 1200px and above */
+@media (min-width: 1200px) {
+  .browse-container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .browse-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

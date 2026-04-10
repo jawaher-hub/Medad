@@ -11,3 +11,45 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Make everything responsive and touch-friendly */
+* {
+  box-sizing: border-box;
+}
+
+/* Better touch targets for mobile */
+button,
+a,
+.clickable,
+.category-chip,
+.tag-btn,
+.donation-card {
+  touch-action: manipulation;
+}
+
+/* Mobile touch improvements */
+@media (max-width: 600px) {
+  button,
+  .submit-btn,
+  .category-chip,
+  .tag-btn {
+    min-height: 44px; 
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 16px; /* Prevents zoom on focus in iOS */
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Better image handling */
+img {
+  max-width: 100%;
+  height: auto;
+}
