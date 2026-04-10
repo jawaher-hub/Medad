@@ -2,7 +2,6 @@
 
 <p>Medad (مِداد) is a platform designed to reduce food waste by connecting restaurants that have surplus food with verified charities that distribute food to beneficiaries in need. Currently, surplus food redistribution relies on informal communication methods such as phone calls or manual coordination, which often leads to delays, inefficiency, and unnecessary food waste. At the same time, many individuals and families experience food insecurity despite the availability of safe, edible surplus food.
 This problem is worth solving because it addresses two major societal challenges: food waste and hunger. By providing a structured digital platform, Medad ensures that surplus food is redistributed efficiently, safely, and transparently. Restaurants benefit by fulfilling their social responsibility and tracking their contributions, charities gain reliable access to verified food donations, and communities benefit from improved resource utilization and reduced waste.</p>
----
 
 ## Installation & Setup
 
