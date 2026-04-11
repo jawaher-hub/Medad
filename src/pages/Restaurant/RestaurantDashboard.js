@@ -28,9 +28,9 @@ function RestaurantDashboard() {
       </div>
 
       <div className="dashboard-buttons">
-        <button onClick={() => navigate('/add-food')}>+ Add Food</button>
-        <button onClick={() => navigate('/my-listings')}>My Listings</button>
-        <button onClick={() => navigate('/requests')}>Charity Requests</button>
+        <button onClick={() => navigate('/restaurant/add-food')}>+ Add Food</button>
+        <button onClick={() => navigate('/restaurant/my-listings')}>My Listings</button>
+        <button onClick={() => navigate('/restaurant/requests')}>Charity Requests</button>
       </div>
     </div>
   );

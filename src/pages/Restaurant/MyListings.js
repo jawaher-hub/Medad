@@ -29,12 +29,12 @@ function MyListings() {
   return (
     <div className="listings-container">
       <div className="listings-header">
-        <button className="back-btn" onClick={() => navigate('/')}>← Back</button>
+        <button className="back-btn" onClick={() => navigate('/restaurant/dashboard')}>← Back</button>
         <h1>My Listings</h1>
         <p>Manage your food donations</p>
       </div>
 
-      <button className="add-btn" onClick={() => navigate('/add-food')}>+ Add New Food</button>
+      <button className="add-btn" onClick={() => navigate('/restaurant/add-food')}>+ Add New Food</button>
 
       <div className="listings-list">
         {listings.map(item => (

@@ -36,7 +36,7 @@ function AddFoodListing() {
         <div className="success-box">
           <h2>✅ Listing Submitted!</h2>
           <p>Your food listing is pending approval.</p>
-          <button onClick={() => navigate('/')}>Back to Dashboard</button>
+          <button onClick={() => navigate('/restaurant/dashboard')}>Back to Dashboard</button>
         </div>
       </div>
     );
@@ -45,7 +45,7 @@ function AddFoodListing() {
   return (
     <div className="add-food-container">
       <div className="add-food-header">
-        <button className="back-btn" onClick={() => navigate('/')}>← Back</button>
+        <button className="back-btn" onClick={() => navigate('/restaurant/dashboard')}>← Back</button>
         <h1>Add Surplus Food</h1>
         <p>Post food donation details</p>
       </div>

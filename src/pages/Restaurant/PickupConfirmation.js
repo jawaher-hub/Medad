@@ -20,7 +20,7 @@ function PickupConfirmation() {
           <div className="success-icon">✅</div>
           <h2>Pickup Confirmed!</h2>
           <p>Donation has been saved to your history.</p>
-          <button onClick={() => navigate('/')}>Back to Dashboard</button>
+          <button onClick={() => navigate('/restaurant/dashboard')}>Back to Dashboard</button>
         </div>
       </div>
     );
@@ -29,7 +29,7 @@ function PickupConfirmation() {
   return (
     <div className="pickup-container">
       <div className="pickup-header">
-        <button className="back-btn" onClick={() => navigate('/requests')}>← Back</button>
+        <button className="back-btn" onClick={() => navigate('/restaurant/requests')}>← Back</button>
         <h1>Pickup Confirmation</h1>
         <p>Confirm successful food collection</p>
       </div>

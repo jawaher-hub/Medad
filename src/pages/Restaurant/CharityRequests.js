@@ -26,7 +26,7 @@ function CharityRequests() {
   return (
     <div className="requests-container">
       <div className="requests-header">
-        <button className="back-btn" onClick={() => navigate('/')}>← Back</button>
+        <button className="back-btn" onClick={() => navigate('/restaurant/dashboard')}>← Back</button>
         <h1>Charity Requests</h1>
         <p>{pending.length} Pending Requests</p>
       </div>
@@ -66,7 +66,7 @@ function CharityRequests() {
                   {req.status === 'Accepted' ? '✓ Accepted' : '✗ Declined'}
                 </span>
                 {req.status === 'Accepted' && (
-                  <button className="confirm-btn" onClick={() => navigate('/pickup-confirm')}>
+                  <button className="confirm-btn" onClick={() => navigate('/restaurant/pickup-confirm')}>
                     Confirm Pickup
                   </button>
                 )}
