@@ -55,9 +55,9 @@ To allow for seamless evaluation, we have configured the following demo accounts
 * **Monitoring:** Access the dashboard to view system-wide analytics and impact data.
 * **Verification:** Review and approve new restaurant or charity registrations to ensure platform safety.
 * **Safety & Support:** Moderate active listings and manage user accounts to maintain community standards.
+
 ## Team Contribution
 
-### 4. Team members and roles.
 ### **Jawaher: System Foundation**
 * **Landing Page:** Responsive home screen.
 * **Authentication:** User Login, sign  and Role Selection.
