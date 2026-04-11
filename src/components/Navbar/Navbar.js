@@ -17,6 +17,13 @@ const Navbar = () => {
     return () => window.removeEventListener('storage', updateRole);
   }, [location]);
 
+  const handleLogout = () => {
+    if (window.confirm("Are you sure you want to logout?")) {
+      localStorage.clear();
+      window.location.href = '/'; 
+    }
+  };
+
   const getDashboardLink = () => {
     if (userRole === 'admin') return '/admin/dashboard';
     if (userRole === 'restaurant') return '/restaurant/dashboard';
@@ -40,8 +47,11 @@ const Navbar = () => {
           <>
             {userRole === 'charity' && <li><Link to="/browse" className="nav-item">Browse</Link></li>}
             
-            {userRole !== 'admin' && (
+            {(userRole === 'restaurant' || userRole === 'charity') && (
               <li><Link to="/settings" className="nav-item" style={{fontSize: '22px'}}>⚙️</Link></li>
+            )}
+            {userRole === 'admin' && (
+              <li><button onClick={handleLogout} className="nav-item" style={{background:'none', border:'none', cursor:'pointer'}}>Logout</button></li>
             )}
           </>
         )}
