@@ -45,7 +45,12 @@ const Navbar = () => {
           </>
         ) : (
           <>
-            {userRole === 'charity' && <li><Link to="/browse" className="nav-item">Browse</Link></li>}
+            {userRole === 'charity' && (
+              <>
+                <li><Link to="/browse" className="nav-item">🍽️ Browse Food</Link></li>
+    <li><Link to="/my-requests" className="nav-item">📋 My Requests</Link></li>
+              </>)
+            }
             
             {(userRole === 'restaurant' || userRole === 'charity') && (
               <li><Link to="/settings" className="nav-item" style={{fontSize: '22px'}}>⚙️</Link></li>

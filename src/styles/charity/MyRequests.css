@@ -1,0 +1,128 @@
+.my-requests-container {
+  min-height: 90vh;
+  background-color: #f4fbf4;
+  padding: 40px 20px;
+}
+
+.my-requests-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.my-requests-header h1 {
+  color: #2e7d32;
+  margin-bottom: 10px;
+}
+
+.my-requests-header p {
+  color: #666;
+}
+
+.requests-list {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.request-item {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: 0.3s;
+}
+
+.request-item:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.request-info h3 {
+  margin: 0 0 5px;
+  color: #1b4332;
+}
+
+.restaurant-name {
+  color: #2e7d32;
+  margin: 0 0 8px;
+  font-weight: 500;
+}
+
+.request-details {
+  color: #666;
+  font-size: 14px;
+  margin: 0 0 10px;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.status-badge.requested {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.status-badge.assigned {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.status-badge.completed {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.action-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.assign-btn {
+  background: #2e7d32;
+  color: white;
+}
+
+.assign-btn:hover {
+  background: #1b5e20;
+}
+
+.confirm-btn {
+  background: #f57c00;
+  color: white;
+}
+
+.confirm-btn:hover {
+  background: #e65100;
+}
+
+.rating-btn {
+  background: #9c27b0;
+  color: white;
+}
+
+.rating-btn:hover {
+  background: #7b1fa2;
+}
+
+@media (max-width: 768px) {
+  .request-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+  
+  .action-btn {
+    width: 100%;
+  }
+}

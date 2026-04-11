@@ -27,6 +27,8 @@ import DonationDetail from './pages/charity/DonationDetail';
 import AssignRepresentative from './pages/charity/AssignRepresentative';
 import ConfirmDelivery from './pages/charity/ConfirmDelivery';
 import RatingFeedback from './pages/charity/RatingFeedback';
+import MyRequests from './pages/charity/MyRequests';
+
 function App() {
   return (
       <Router>
@@ -60,6 +62,7 @@ function App() {
             <Route path="/assign/:requestId" element={<AssignRepresentative />} />
             <Route path="/confirm/:requestId" element={<ConfirmDelivery />} />
             <Route path="/rating/:deliveryId" element={<RatingFeedback />} />
+            <Route path="/my-requests" element={<MyRequests />} />
             </Routes>
         </div>
       </Router>
