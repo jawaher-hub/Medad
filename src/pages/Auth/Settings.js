@@ -6,19 +6,26 @@ const Settings = () => {
     const navigate = useNavigate();
     const userRole = localStorage.getItem('userRole') || 'User';
     
-    const [profile, setProfile] = useState({
-        name: userRole === 'restaurant' ? 'Al-Baik' : 'Noor Charity',
-        phone: '0501234567',
-        address: 'Khobar, Eastern Province',
-        bio: userRole === 'restaurant' ? 'Leading restaurant in fast food.' : 'Helping families in need.'
+    const [profile, setProfile] = useState(() => {
+        const savedData = JSON.parse(localStorage.getItem('userData'));
+        if (savedData) return savedData; 
+        
+        return {
+            name: userRole === 'restaurant' ? 'Al-Baik' : 'Noor Charity',
+            phone: '0501234567',
+            address: 'Khobar, Eastern Province',
+            bio: userRole === 'restaurant' ? 'Leading restaurant in fast food.' : 'Helping families in need.'
+        };
     });
 
     const handleSave = (e) => {
-        e.preventDefault();
-        alert('Settings updated successfully!');
-        const path = userRole === 'restaurant' ? '/restaurant/dashboard' : '/browse';
-        navigate(path);
-    };
+            e.preventDefault();
+            
+            localStorage.setItem('userData', JSON.stringify(profile));
+            alert('Settings updated successfully!');
+            const path = userRole === 'restaurant' ? '/restaurant/dashboard' : '/browse';
+            navigate(path);
+        };
 
     const handleLogout = () => {
     if (window.confirm("Are you sure you want to logout?")) {
