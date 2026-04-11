@@ -56,6 +56,7 @@ To allow for seamless evaluation, we have configured the following demo accounts
 * **Verification:** Review and approve new restaurant or charity registrations to ensure platform safety.
 * **Safety & Support:** Moderate active listings and manage user accounts to maintain community standards.
 <p>note: make sure to log out in order to navigate all roles (top left icon)</p>
+
 ## Team Contribution
 
 ### **Jawaher: System Foundation**
