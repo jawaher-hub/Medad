@@ -24,13 +24,13 @@
 }
 
 .back-btn {
-  background: rgba(255,255,255,0.2);
-  color: white;
-  border: none;
-  padding: 6px 14px;
+  background: white;
+  color: #2d6a4f;
+  border: 2px solid white;
+  padding: 8px 16px;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 14px;
+  font-weight: bold;
 }
 
 .add-food-form {
