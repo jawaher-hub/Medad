@@ -43,23 +43,26 @@ To allow for seamless evaluation, we have configured the following demo accounts
 * **Fulfillment:** Respond to incoming pickup requests from charities and confirm when the food has been successfully handed over.
 
 ### 2. Charity Experience 
-* **Discovery:** Access the main feed to browse available food listings. Use search or filters to find specific items or locations.
-* **Requesting:** View detailed information for any listing, including safety and handling guidelines, then submit a request.
-* **Logistics:** Assign a representative or driver to handle the pickup by providing their contact details.
-* **Verification:** Confirm the delivery of food and provide feedback/ratings for the donating restaurant.
-
+* **Browse Feed:** Searchable grid of available food donations with category filtering.
+* **Donation Detail** Comprehensive view with safety info and request functionality
+* **Assign Representative** Form to assign pickup personnel with validation
+* **Confirm Delivery**  Delivery verification with photo upload and phone collection
+* **Rating & Feedback** 5-star rating system with tags and written reviews
+* **My Requests Dashboard** Central tracking of all donation requests with status management
+* **navigation flow**: Browse -> Detail -> Requests -> Assign -> Confirm -> Rate
+  
 ### 3. Administrator Control 
 * **Monitoring:** Access the dashboard to view system-wide analytics and impact data.
 * **Verification:** Review and approve new restaurant or charity registrations to ensure platform safety.
 * **Safety & Support:** Moderate active listings and manage user accounts to maintain community standards.
 ## Team Contribution
 
----
+### 4. Team members and roles.
 ### **Jawaher: System Foundation**
 * **Landing Page:** Responsive home screen.
-* **Authentication:** User Login (with validation) and Role Selection.
+* **Authentication:** User Login, sign  and Role Selection.
 * **Registration:** Dynamic forms for Restaurants and Charities.
-* **Architecture:** Global Navigation, Sidebar, and Routing system.
+* **Architecture:** Global Navigation, and Routing system.
 
 ### **Fatmah: Restaurant Operations**
 * **Dashboard:** Overview of active food listings.
@@ -68,15 +71,10 @@ To allow for seamless evaluation, we have configured the following demo accounts
 * **Interaction:** Accept/Reject Charity requests and Pickup Confirmation modals.
 
 ### **Zahraa: Charity Experience & Verification**
-Developed the complete charity user journey, ensuring seamless food donation requests and delivery verification.
-* **Browse Feed:** Searchable grid of available food donations with category filtering.
-* **Donation Detail** Comprehensive view with safety info and request functionality
-* **Assign Representative** Form to assign pickup personnel with validation
-* **Confirm Delivery**  Delivery verification with photo upload and phone collection
-* **Rating & Feedback** 5-star rating system with tags and written reviews
-* **My Requests Dashboard** Central tracking of all donation requests with status management
--  Established complete navigation flow: Browse -> Detail -> Requests -> Assign -> Confirm -> Rate
-
+* **Browse Feed:** Real-time search and category filtering.
+* **Interaction:** Donation Detail View.
+* **Logistics:** Assign Pickup Representative form.
+* **Closing Cycle:** Confirm Delivery Page (Photo uploads & Driver info) and Ratings.
 
 ### **Sadeem: Administrator Control Panel**
 * **Analytics:** Impact charts and data visualization cards.
