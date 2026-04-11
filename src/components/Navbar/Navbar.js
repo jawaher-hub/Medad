@@ -47,8 +47,8 @@ const Navbar = () => {
           <>
             {userRole === 'charity' && (
               <>
-                <li><Link to="/browse" className="nav-item">🍽️ Browse Food</Link></li>
-    <li><Link to="/my-requests" className="nav-item">📋 My Requests</Link></li>
+                <li><Link to="/browse" className="nav-item"> Browse Food</Link></li>
+                <li><Link to="/my-requests" className="nav-item"> My Requests</Link></li>
               </>)
             }
             

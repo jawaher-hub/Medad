@@ -56,7 +56,7 @@ const RatingFeedback = () => {
     return (
       <div className="form-container">
         <div className="auth-form" style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '50px', marginBottom: '20px' }}>🎉</div>
+          <div style={{ fontSize: '50px', marginBottom: '20px' }}>✅</div>
           <h2>Thank You!</h2>
           <p>Your feedback helps us improve the food donation experience.</p>
           <button onClick={() => navigate('/browse')} className="submit-btn" style={{ marginTop: '20px' }}>
