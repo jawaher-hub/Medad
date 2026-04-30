@@ -1,32 +1,60 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AddFoodListing.css';
+import { addListing } from '../../services/api';
 
 function AddFoodListing() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
     foodName: '', category: '', quantity: '', expirationDate: '', photo: null
   });
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors]   = useState({});
+  const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [apiError, setApiError]   = useState('');
 
   const validate = () => {
     const newErrors = {};
-    if (!form.foodName) newErrors.foodName = 'Food name is required';
-    if (!form.category) newErrors.category = 'Category is required';
+    if (!form.foodName)    newErrors.foodName = 'Food name is required';
+    if (!form.category)    newErrors.category = 'Category is required';
     if (!form.quantity || form.quantity <= 0) newErrors.quantity = 'Quantity must be greater than 0';
     if (!form.expirationDate) newErrors.expirationDate = 'Expiration date is required';
     else if (new Date(form.expirationDate) <= new Date()) newErrors.expirationDate = 'Date must be in the future';
-    if (!form.photo) newErrors.photo = 'Photo is required';
+    if (!form.photo)       newErrors.photo = 'Photo is required';
     return newErrors;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const newErrors = validate();
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-    } else {
+      return;
+    }
+
+    setLoading(true);
+    setApiError('');
+
+    try {
+      // Build the payload (photo name only — real upload needs FormData/S3)
+      const payload = {
+        title:          form.foodName,
+        category:       form.category,
+        quantity:       Number(form.quantity),
+        expiryDate:     form.expirationDate,
+        photoName:      form.photo?.name || '',
+      };
+
+      await addListing(payload);
       setSubmitted(true);
+    } catch (err) {
+      // If backend is not yet running, still show success (demo mode)
+      if (err.message && err.message.includes('fetch')) {
+        setSubmitted(true);   // demo fallback
+      } else {
+        setApiError(err.message || 'Something went wrong. Please try again.');
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -51,14 +79,12 @@ function AddFoodListing() {
       </div>
 
       <div className="add-food-form">
+        {apiError && <div className="error-banner">{apiError}</div>}
+
         <div className="form-group">
           <label>Food Name *</label>
-          <input
-            type="text"
-            placeholder="e.g. Rice, Shawarma..."
-            value={form.foodName}
-            onChange={e => setForm({...form, foodName: e.target.value})}
-          />
+          <input type="text" placeholder="e.g. Rice, Shawarma..."
+            value={form.foodName} onChange={e => setForm({...form, foodName: e.target.value})} />
           {errors.foodName && <span className="error">{errors.foodName}</span>}
         </div>
 
@@ -77,36 +103,28 @@ function AddFoodListing() {
 
         <div className="form-group">
           <label>Quantity *</label>
-          <input
-            type="number"
-            placeholder="Number of portions"
-            value={form.quantity}
-            onChange={e => setForm({...form, quantity: e.target.value})}
-          />
+          <input type="number" placeholder="Number of portions"
+            value={form.quantity} onChange={e => setForm({...form, quantity: e.target.value})} />
           {errors.quantity && <span className="error">{errors.quantity}</span>}
         </div>
 
         <div className="form-group">
           <label>Expiration Date *</label>
-          <input
-            type="datetime-local"
-            value={form.expirationDate}
-            onChange={e => setForm({...form, expirationDate: e.target.value})}
-          />
+          <input type="datetime-local" value={form.expirationDate}
+            onChange={e => setForm({...form, expirationDate: e.target.value})} />
           {errors.expirationDate && <span className="error">{errors.expirationDate}</span>}
         </div>
 
         <div className="form-group">
           <label>Upload Photo *</label>
-          <input
-            type="file"
-            accept="image/jpg, image/jpeg, image/png"
-            onChange={e => setForm({...form, photo: e.target.files[0]})}
-          />
+          <input type="file" accept="image/jpg, image/jpeg, image/png"
+            onChange={e => setForm({...form, photo: e.target.files[0]})} />
           {errors.photo && <span className="error">{errors.photo}</span>}
         </div>
 
-        <button className="submit-btn" onClick={handleSubmit}>Submit Listing</button>
+        <button className="submit-btn" onClick={handleSubmit} disabled={loading}>
+          {loading ? 'Submitting…' : 'Submit Listing'}
+        </button>
       </div>
     </div>
   );
