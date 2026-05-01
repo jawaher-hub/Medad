@@ -1,98 +1,370 @@
-# Medad (مداد)
+# Medad (مِداد) 
 
-<p>Medad (مِداد) is a platform designed to reduce food waste by connecting restaurants that have surplus food with verified charities that distribute food to beneficiaries in need. Currently, surplus food redistribution relies on informal communication methods such as phone calls or manual coordination, which often leads to delays, inefficiency, and unnecessary food waste. At the same time, many individuals and families experience food insecurity despite the availability of safe, edible surplus food.
-This problem is worth solving because it addresses two major societal challenges: food waste and hunger. By providing a structured digital platform, Medad ensures that surplus food is redistributed efficiently, safely, and transparently. Restaurants benefit by fulfilling their social responsibility and tracking their contributions, charities gain reliable access to verified food donations, and communities benefit from improved resource utilization and reduced waste.</p>
-
-## Installation & Setup
-
-Follow these steps to run the project on your computer:
-
-1.  **Clone the repository:**
-
-2.  **Navigate to the project folder:**
-    ```bash
-    cd medad-app
-    ```
-3.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
-4.  **Start the development server:**
-    ```bash
-    npm start
-    ```
-    The app will be available at `http://localhost:3000`.
----
-## How to Inspect & Test the Prototype
-
-To allow for seamless evaluation, we have configured the following demo accounts. You can use these to log in and explore the specific functionalities of each user role:
-
-| Role | Email | Password | What to Inspect |
-| :--- | :--- | :--- | :--- |
-| **Admin** | `admin@medad.com` | `123456` | Analytics, Account Approvals, & Safety Monitor |
-| **Restaurant** | `rest@medad.com` | `123456` | Listing food, Managing requests, & Dashboard |
-| **Charity** | `charity@medad.com` | `123456` | Browsing food, Assigning drivers, & Feedback |
+Medad is a platform designed to reduce food waste by connecting restaurants that have surplus food with verified charities that distribute food to beneficiaries in need.
 
 ---
-## Usage examples
 
-### 1. Restaurant Operations 
-* **Onboarding:** Use the registration form to join as a food provider.
-* **Listing Food:** Navigate to the inventory section to post surplus meals. You can include descriptions, set expiry times, and upload photos.
-* **Managing Status:** View all active listings to modify details or remove items once they are no longer available.
-* **Fulfillment:** Respond to incoming pickup requests from charities and confirm when the food has been successfully handed over.
+## Team Members
 
-### 2. Charity Experience 
-* **Browse Feed:** Searchable grid of available food donations with category filtering.
-* **Donation Detail** Comprehensive view with safety info and request functionality
-* **Assign Representative** Form to assign pickup personnel with validation
-* **Confirm Delivery**  Delivery verification with photo upload and phone collection
-* **Rating & Feedback** 5-star rating system with tags and written reviews
-* **My Requests Dashboard** Central tracking of all donation requests with status management
-* **navigation flow**: Browse -> Detail -> Requests -> Assign -> Confirm -> Rate
-  
-### 3. Administrator Control 
-* **Monitoring:** Access the dashboard to view system-wide analytics and impact data.
-* **Verification:** Review and approve new restaurant or charity registrations to ensure platform safety.
-* **Safety & Support:** Moderate active listings and manage user accounts to maintain community standards.
-<p>note: make sure to log out in order to navigate all roles (top left icon)</p>
+| Name | Role |
+|---|---|
+| Jawaher | System Foundation & Authentication |
+| Fatmah | Restaurant Operations |
+| Zahraa | Charity Experience & Verification |
+| Sadeem | QA, Deployer & Documentation |
 
-## Team Contribution
-
-### **Jawaher: System Foundation**
-* **Landing Page:** Responsive home screen.
-* **Authentication:** User Login, sign  and Role Selection.
-* **Registration:** Dynamic forms for Restaurants and Charities.
-* **Architecture:** Global Navigation, and Routing system.
-
-### **Fatmah: Restaurant Operations**
-* **Dashboard:** Overview of active food listings.
-* **Inventory Control:** Add Surplus Food Form (Time pickers & File uploads).
-* **Management:** My Listings (Edit/Delete logic).
-* **Interaction:** Accept/Reject Charity requests and Pickup Confirmation modals.
-
-### **Zahraa: Charity Experience & Verification**
-* **Browse Feed:** Real-time search and category filtering.
-* **Interaction:** Donation Detail View.
-* **Logistics:** Assign Pickup Representative form.
-* **Closing Cycle:** Confirm Delivery Page (Photo uploads & Driver info) and Ratings.
-
-### **Sadeem: Administrator Control Panel**
-* **Analytics:** Impact charts and data visualization cards.
-* **Verification:** Pending User Approval Queue.
-* **Security:** Safety Monitor to flag/remove unsafe listings.
-* **Management:** User List (Suspend/Reactivate accounts) and Application Settings.
 ---
 
-#### Frameworks 
-* **React.js:** The core frontend library.
-* **React Router DOM:** Used for handling routing and navigation between different pages (Dashboard, Settings, Auth..).
+##  Demo Accounts
 
-#### Dependencies
-* **State Management (Hooks)** 
-* **Browser Storage (LocalStorage)** 
-* **CSS3 (Modular CSS)** 
-* **JavaScript**
+| Role | Email | Password |
+|---|---|---|
+| Admin | `admin@medad.com` | `123456` |
+| Restaurant | `rest@medad.com` | `123456` |
+| Charity | `charity@medad.com` | `123456` |
 
-#### Tools
-* **Node.js & npm:** Used for package management and running the development environment.
+---
+
+## 🖥 Frontend Setup
+
+### Requirements
+- Node.js v18+
+- npm
+
+### Steps
+
+```bash
+git clone https://github.com/jawaher-hub/Medad-Frontend.git
+cd Medad-Frontend
+npm install
+npm start
+```
+
+The app will be available at `http://localhost:3000`
+
+---
+
+## ⚙ Backend Setup
+
+### Requirements
+- Node.js v18+
+- npm
+- MongoDB Atlas account
+
+### Steps
+
+```bash
+cd server
+npm install
+node server.js
+```
+
+The server will run at `http://localhost:5000`
+
+You should see:
+
+```
+Server is running on port 5000
+Connected to MongoDB Atlas
+```
+
+---
+
+##  Environment Variables
+
+Create a `.env` file inside the `/server` folder:
+
+```
+PORT=5000
+MONGODB_URI=your_mongodb_atlas_connection_string_here
+```
+
+> Never push your `.env` file to GitHub. It is already listed in `.gitignore`.
+
+---
+
+##  API Documentation
+
+Base URL (local): `http://localhost:5000`
+
+Base URL (production): `https://medad-backend.onrender.com`
+
+---
+
+###  Auth Routes
+
+#### POST `/api/auth/register`
+
+Request Body:
+
+```json
+{
+  "name": "Test Restaurant",
+  "email": "test@medad.com",
+  "password": "123456",
+  "role": "Restaurant"
+}
+```
+
+Response 201 Created:
+
+```json
+{
+  "_id": "69f51e796a163e36e1afefdf",
+  "name": "Test Restaurant",
+  "email": "test@medad.com",
+  "role": "Restaurant",
+  "isActive": true
+}
+```
+
+---
+
+#### POST `/api/auth/login`
+
+Request Body:
+
+```json
+{
+  "email": "test@medad.com",
+  "password": "123456"
+}
+```
+
+Response 200 OK:
+
+```json
+{
+  "_id": "69f51e796a163e36e1afefdf",
+  "name": "Test Restaurant",
+  "email": "test@medad.com",
+  "role": "Restaurant",
+  "isActive": true
+}
+```
+
+Response 401 Unauthorized:
+
+```json
+{
+  "error": "Invalid credentials"
+}
+```
+
+---
+
+#### GET `/api/auth/users`
+
+Response 200 OK:
+
+```json
+[
+  {
+    "_id": "69f51e796a163e36e1afefdf",
+    "name": "Test Restaurant",
+    "email": "test@medad.com",
+    "role": "Restaurant",
+    "isActive": true
+  }
+]
+```
+
+---
+
+### Listing Routes
+
+#### POST `/api/listings/add`
+
+Request Body:
+
+```json
+{
+  "restaurantId": "69f222861ed2f3c537b1ba9b",
+  "foodName": "Rice and Chicken",
+  "quantity": 10,
+  "expiryTime": "2026-05-03T18:00:00Z",
+  "description": "Leftover rice and chicken from today"
+}
+```
+
+Response 201 Created:
+
+```json
+{
+  "_id": "69f521a56a163e36e1afefe0",
+  "foodName": "Rice and Chicken",
+  "quantity": 10,
+  "status": "Available"
+}
+```
+
+---
+
+#### GET `/api/listings`
+
+Response 200 OK:
+
+```json
+[
+  {
+    "_id": "69f521a56a163e36e1afefe0",
+    "foodName": "Rice and Chicken",
+    "quantity": 10,
+    "status": "Available"
+  }
+]
+```
+
+---
+
+#### PUT `/api/listings/:id`
+
+Request Body:
+
+```json
+{
+  "quantity": 5,
+  "status": "Available"
+}
+```
+
+Response 200 OK:
+
+```json
+{
+  "_id": "69f521a56a163e36e1afefe0",
+  "foodName": "Rice and Chicken",
+  "quantity": 5,
+  "status": "Available"
+}
+```
+
+---
+
+#### DELETE `/api/listings/:id`
+
+Response 200 OK:
+
+```json
+{
+  "message": "Deleted"
+}
+```
+
+---
+
+###  Request Routes
+
+#### POST `/api/requests`
+
+Request Body:
+
+```json
+{
+  "listingId": "69f521a56a163e36e1afefe0",
+  "charityId": "69f222861ed2f3c537b1ba9b",
+  "restaurantId": "69f222861ed2f3c537b1ba9b",
+  "status": "Pending"
+}
+```
+
+Response 201 Created:
+
+```json
+{
+  "_id": "69f524df6a163e36e1afefe1",
+  "listingId": "69f521a56a163e36e1afefe0",
+  "charityId": "69f222861ed2f3c537b1ba9b",
+  "status": "Pending"
+}
+```
+
+---
+
+### Feedback Routes
+
+#### POST `/api/feedback/submit`
+
+Request Body:
+
+```json
+{
+  "requestId": "69f524df6a163e36e1afefe1",
+  "rating": 5,
+  "comment": "Great food, thank you!"
+}
+```
+
+Response 201 Created:
+
+```json
+{
+  "_id": "69f530006a163e36e1afefe2",
+  "rating": 5,
+  "comment": "Great food, thank you!"
+}
+```
+
+Response 400 Bad Request (not delivered yet):
+
+```json
+{
+  "error": "Cannot rate before delivery"
+}
+```
+
+---
+
+##  API Test Results (Postman)
+
+| Route | Method | Status | Result |
+|---|---|---|---|
+| /api/auth/register | POST | 201 Created | ✅ PASS |
+| /api/auth/login | POST | 200 OK | ✅ PASS |
+| /api/auth/users | GET | 200 OK | ✅ PASS |
+| /api/listings/add | POST | 201 Created | ✅ PASS |
+| /api/listings | GET | 200 OK | ✅ PASS |
+| /api/listings/:id | PUT | 200 OK | ✅ PASS |
+| /api/listings/:id | DELETE | 200 OK | ✅ PASS |
+| /api/requests | POST | 201 Created | ✅ PASS |
+| /api/feedback/submit | POST | 400 (validation works) | ✅ PASS |
+
+---
+
+## Live URLs
+
+| Service | URL |
+|---|---|
+| Frontend | https://medad-frontend.vercel.app |
+| Backend | https://medad-backend.onrender.com |
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | React.js, React Router DOM, CSS3 |
+| Backend | Node.js, Express.js |
+| Database | MongoDB Atlas |
+| Deployment | Vercel (Frontend), Render (Backend) |
+
+---
+
+## Folder Structure
+
+```
+Medad-Frontend/
+├── public/
+├── src/
+│   ├── components/
+│   ├── pages/
+│   └── App.js
+├── server/
+│   ├── models/
+│   ├── routes/
+│   └── server.js
+├── .gitignore
+├── package.json
+└── README.md
+```
