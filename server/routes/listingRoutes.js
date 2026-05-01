@@ -34,6 +34,16 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/my-listings', async (req, res) => {
+    try {
+        const restaurantId = req.query.restaurantId; 
+        const listings = await Listing.find({ restaurantId: restaurantId });
+        res.json(listings);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 router.get('/flagged', async (req, res) => {
     try {
         const flaggedListings = await Listing.find({ isFlagged: true });
