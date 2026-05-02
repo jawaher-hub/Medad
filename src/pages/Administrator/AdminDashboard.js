@@ -1,56 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 function AdminDashboard() {
-    const stats = [
-        { title: 'Total Restaurants', value: 15 },
-        { title: 'Total Charities', value: 10 },
-        { title: 'Food Listings', value: 25 },
-        { title: 'Completed Donations', value: 30 },
-        { title: 'Pending Approvals', value: 5 },
-        { title: 'Flagged Listings', value: 3 }
-    ];
+    const [stats, setStats] = useState([
+        { title: 'Total Restaurants', value: 0 },
+        { title: 'Total Charities', value: 0 },
+        { title: 'Food Listings', value: 0 },
+        { title: 'Pending Approvals', value: 0 }
+    ]);
 
-    const monthlyData = [
-        { month: 'Jan', donations: 12 },
-        { month: 'Feb', donations: 18 },
-        { month: 'Mar', donations: 22 },
-        { month: 'Apr', donations: 17 },
-        { month: 'May', donations: 25 },
-        { month: 'Jun', donations: 30 }
-    ];
+    const styles = {
+        page: { padding: '20px', backgroundColor: '#f9f9f9', minHeight: '100vh' },
+        adminTopNav: { display: 'flex', gap: '20px', marginBottom: '30px', borderBottom: '1px solid #ddd', paddingBottom: '10px' },
+        adminNavLink: { textDecoration: 'none', color: '#007bff', fontWeight: 'bold' },
+        header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' },
+        title: { fontSize: '24px', color: '#333' },
+        select: { padding: '8px', borderRadius: '5px', border: '1px solid #ccc' },
+        cardGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '30px' },
+        card: { backgroundColor: '#fff', padding: '20px', borderRadius: '10px', boxShadow: '0 2px 5px rgba(0,0,0,0.1)', textAlign: 'center' },
+        cardTitle: { fontSize: '16px', color: '#666', marginBottom: '10px' },
+        cardValue: { fontSize: '28px', fontWeight: 'bold', color: '#333' }
+    };
 
-    const recentActivities = [
-        'Dominos Restaurant added a new food listing.',
-        'Ehsan completed a donation pickup.',
-        '2 new charity accounts are waiting for approval.',
-        'One food listing was flagged for safety review.'
-    ];
+    useEffect(() => {
+        const fetchAdminStats = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/api/admin/stats', {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                const data = await response.json();
+                
+                setStats([
+                    { title: 'Total Restaurants', value: data.restaurantsCount || 0 },
+                    { title: 'Total Charities', value: data.charitiesCount || 0 },
+                    { title: 'Food Listings', value: data.listingsCount || 0 },
+                    { title: 'Pending Approvals', value: data.pendingUsersCount || 0 }
+                ]);
+            } catch (error) {
+                console.error("Error fetching admin stats", error);
+            }
+        };
+        fetchAdminStats();
+    }, []);
 
     return (
         <div style={styles.page}>
             <div style={styles.adminTopNav}>
-                <Link to="/admin/pending-approvals" style={styles.adminNavLink}>
-                    Pending Approvals
-                </Link>
-                <Link to="/admin/safety-monitor" style={styles.adminNavLink}>
-                    Safety Monitor
-                </Link>
-                <Link to="/admin/user-management" style={styles.adminNavLink}>
-                    User Management
-                </Link>
-                <Link to="/admin/settings" style={styles.adminNavLink}>
-                    Settings
-                </Link>
+                <Link to="/admin/pending-approvals" style={styles.adminNavLink}>Pending Approvals</Link>
+                <Link to="/admin/safety-monitor" style={styles.adminNavLink}>Safety Monitor</Link>
+                <Link to="/admin/user-management" style={styles.adminNavLink}>User Management</Link>
+                <Link to="/admin/settings" style={styles.adminNavLink}>Settings</Link>
             </div>
 
             <div style={styles.header}>
                 <h1 style={styles.title}>Admin Analytics Dashboard</h1>
-                <select style={styles.select}>
-                    <option>Last 7 Days</option>
-                    <option>Last 30 Days</option>
-                    <option>This Year</option>
-                </select>
             </div>
 
             <div style={styles.cardGrid}>
@@ -61,40 +64,9 @@ function AdminDashboard() {
                     </div>
                 ))}
             </div>
-
-            <div style={styles.sectionWrapper}>
-                <div style={styles.chartSection}>
-                    <h2 style={styles.sectionTitle}>Monthly Donations Overview</h2>
-                    <div style={styles.chartBox}>
-                        {monthlyData.map((item, index) => (
-                            <div key={index} style={styles.barItem}>
-                                <div
-                                    style={{
-                                        ...styles.bar,
-                                        height: `${item.donations * 5}px`
-                                    }}
-                                ></div>
-                                <span style={styles.barLabel}>{item.month}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                <div style={styles.activitySection}>
-                    <h2 style={styles.sectionTitle}>Recent Activity</h2>
-                    <ul style={styles.activityList}>
-                        {recentActivities.map((activity, index) => (
-                            <li key={index} style={styles.activityItem}>
-                                {activity}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </div>
         </div>
     );
 }
-
 const styles = {
     page: {
         minHeight: '100vh',

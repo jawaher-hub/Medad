@@ -1,40 +1,58 @@
-import React, { useState, useEffect } from 'react'; // eslint-disable-line
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../Registration/RegisterForm.css'; 
 
 const Settings = () => {
     const navigate = useNavigate();
-    const userRole = localStorage.getItem('userRole') || 'User';
+    const savedAuth = JSON.parse(localStorage.getItem('user'));
+    const userRole = savedAuth?.role?.toLowerCase() || 'user';
+    const userId = savedAuth?._id;
     
     const [profile, setProfile] = useState(() => {
         const savedData = JSON.parse(localStorage.getItem('userData'));
         if (savedData) return savedData; 
         
         return {
-            name: userRole === 'restaurant' ? 'Al-Baik' : 'Noor Charity',
-            phone: '0501234567',
-            address: 'Khobar, Eastern Province',
-            bio: userRole === 'restaurant' ? 'Leading restaurant in fast food.' : 'Helping families in need.'
+            name: savedAuth?.name || '',
+            phone: savedAuth?.phone || '',
+            address: savedAuth?.address || '',
+            bio: savedAuth?.bio || ''
         };
     });
 
-    const handleSave = (e) => {
-            e.preventDefault();
-            
-            localStorage.setItem('userData', JSON.stringify(profile));
-            alert('Settings updated successfully!');
-            const path = userRole === 'restaurant' ? '/restaurant/dashboard' : '/browse';
-            navigate(path);
-        };
+    const handleSave = async (e) => {
+        e.preventDefault();
+        
+        try {
+            const response = await fetch(`http://localhost:5000/api/auth/update-profile/${userId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(profile)
+            });
 
-    const handleLogout = () => {
-    if (window.confirm("Are you sure you want to logout?")) {
-        localStorage.removeItem('userRole');
-        localStorage.clear(); 
-        window.location.href = '/'; 
-    }
+            if (response.ok) {
+                const updatedUserFromServer = await response.json();
+                localStorage.setItem('userData', JSON.stringify(profile));
+                localStorage.setItem('user', JSON.stringify({ ...savedAuth, ...profile }));
+                
+                alert('Settings updated in Database successfully!');
+                const path = userRole === 'restaurant' ? '/restaurant/dashboard' : '/browse';
+                navigate(path);
+            } else {
+                alert('Failed to update profile on server');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Error connecting to server');
+        }
     };
 
+    const handleLogout = () => {
+        if (window.confirm("Are you sure you want to logout?")) {
+            localStorage.clear(); 
+            window.location.href = '/'; 
+        }
+    };
 
     return (
         <div className="form-container" style={{ marginTop: '40px' }}>
@@ -47,7 +65,11 @@ const Settings = () => {
                     <h4 style={{ color: '#666', marginBottom: '15px' }}>General Information</h4>
                     <div className="input-group">
                         <label>Entity Name</label>
-                        <input type="text" value={profile.name} onChange={(e) => setProfile({...profile, name: e.target.value})} />
+                        <input 
+                            type="text" 
+                            value={profile.name} 
+                            onChange={(e) => setProfile({...profile, name: e.target.value})} 
+                        />
                     </div>
                     <div className="input-group">
                         <label>{userRole === 'restaurant' ? 'Restaurant Bio' : 'Charity Mission'}</label>
@@ -64,11 +86,19 @@ const Settings = () => {
                     <h4 style={{ color: '#666', marginBottom: '15px' }}>Contact & Location</h4>
                     <div className="input-group">
                         <label>Contact Number</label>
-                        <input type="text" value={profile.phone} onChange={(e) => setProfile({...profile, phone: e.target.value})} />
+                        <input 
+                            type="text" 
+                            value={profile.phone} 
+                            onChange={(e) => setProfile({...profile, phone: e.target.value})} 
+                        />
                     </div>
                     <div className="input-group">
                         <label>Operating City / Address</label>
-                        <input type="text" value={profile.address} onChange={(e) => setProfile({...profile, address: e.target.value})} />
+                        <input 
+                            type="text" 
+                            value={profile.address} 
+                            onChange={(e) => setProfile({...profile, address: e.target.value})} 
+                        />
                     </div>
                 </section>
                 
@@ -88,4 +118,5 @@ const Settings = () => {
         </div>
     );
 };
+
 export default Settings;
