@@ -372,7 +372,7 @@ Medad-Frontend/
 
 While the core infrastructure of **Medad** is functional, some integration challenges persist in the current version which may affect real-time data synchronization:
 
-*   **Real time Listing Synchronization**: Newly added food listings by restaurants may not appear immediately on the Charity feed due to client-side state synchronization delays.
+*   **Real time Listing Synchronization**: Newly added food listings by restaurants may not appear on the Charity feed due to client side state synchronization issue.
 *   **Cross Role Data Persistence**: Updates to donation requests (e.g., status changes) might not reflect instantly across all dashboards (Admin, Restaurant, and Charity) without a manual page refresh.
 *   **Media Rendering**: The system is optimized for data object handling; however, seamless image hosting and rendering for food items are still undergoing optimization for production environments.
 
