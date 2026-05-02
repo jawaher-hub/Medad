@@ -8,9 +8,9 @@ Medad is a platform designed to reduce food waste by connecting restaurants that
 
 | Name | Role |
 |---|---|
-| Jawaher | System Foundation & Authentication |
-| Fatmah | Restaurant Operations |
-| Zahraa | Charity Experience & Verification |
+| Zahraa | Server & database set up |
+| Jawaher | API & Schema |
+| Fatmah | Frontend-backend integrator |
 | Sadeem | QA, Deployer & Documentation |
 
 ---
