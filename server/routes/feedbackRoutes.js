@@ -3,11 +3,10 @@ const router = express.Router();
 const Feedback = require('../models/Feedback');
 const Request = require('../models/Request');
 
-router.post('/submit', async (req, res) => {
+router.post('/', async (req, res) => {
   const { requestId, rating, comment } = req.body;
-  
+
   try {
-    
     const request = await Request.findById(requestId);
     if (!request || request.status !== 'Delivered') {
       return res.status(400).json({ error: 'Cannot rate before delivery' });
@@ -18,7 +17,7 @@ router.post('/submit', async (req, res) => {
       charityId: request.charityId,
       requestId,
       rating,
-      comment
+      comment,
     });
 
     await newFeedback.save();
@@ -27,4 +26,14 @@ router.post('/submit', async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+
+router.get('/restaurant/:restaurantId', async (req, res) => {
+  try {
+    const feedback = await Feedback.find({ restaurantId: req.params.restaurantId });
+    res.json(feedback);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
