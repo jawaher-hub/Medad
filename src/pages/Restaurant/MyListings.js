@@ -14,7 +14,7 @@ function MyListings() {
   const navigate = useNavigate();
   const [listings, setListings]   = useState([]);
   const [loading, setLoading]     = useState(true);
-  const [error, setError]         = useState('');
+  const [error, setError]         = useState(''); // eslint-disable-line
   const [editItem, setEditItem]   = useState(null);
 
   // ── Load listings from API on mount ──────────────────────

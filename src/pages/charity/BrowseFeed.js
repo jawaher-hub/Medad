@@ -11,7 +11,7 @@ const BrowseFeed = () => {
   const [searchTerm, setSearchTerm]           = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [isLoading, setIsLoading]             = useState(true);
-  const [apiError, setApiError]               = useState('');
+  const [apiError, setApiError]               = useState(''); // eslint-disable-line
 
   // ── Fetch listings: try API first, fall back to mock ─────
   useEffect(() => {
