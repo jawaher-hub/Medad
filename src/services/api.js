@@ -1,11 +1,10 @@
 // ============================================================
 //  api.js — Central API Service for Medad
-//  Base URL points to the backend server (localhost:5000)
+//  Base URL points to the backend server
 // ============================================================
 
-const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const BASE_URL = process.env.REACT_APP_API_URL || 'https://medad-backend.onrender.com/api';
 
-// ─── Helper: build headers (attach token if logged in) ───
 const getHeaders = () => {
   const token = localStorage.getItem('token');
   return {
@@ -14,7 +13,6 @@ const getHeaders = () => {
   };
 };
 
-// ─── Helper: handle response & errors consistently ───────
 const handleResponse = async (res) => {
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
@@ -24,11 +22,6 @@ const handleResponse = async (res) => {
   return data;
 };
 
-// ================================================================
-//  AUTH
-// ================================================================
-
-// POST /api/auth/register  (restaurant or charity)
 export const registerUser = async (userData) => {
   const res = await fetch(`${BASE_URL}/auth/register`, {
     method: 'POST',
@@ -38,7 +31,6 @@ export const registerUser = async (userData) => {
   return handleResponse(res);
 };
 
-// POST /api/auth/login
 export const loginUser = async (email, password) => {
   const res = await fetch(`${BASE_URL}/auth/login`, {
     method: 'POST',
@@ -46,17 +38,34 @@ export const loginUser = async (email, password) => {
     body: JSON.stringify({ email, password }),
   });
   const data = await handleResponse(res);
-  // Save token & role so every future request is authenticated
   if (data.token) localStorage.setItem('token', data.token);
   if (data.role)  localStorage.setItem('userRole', data.role);
   return data;
 };
 
-// ================================================================
-//  LISTINGS  (surplus food posted by restaurants)
-// ================================================================
+export const getAllUsers = async () => {
+  const res = await fetch(`${BASE_URL}/auth/users`, {
+    headers: getHeaders(),
+  });
+  return handleResponse(res);
+};
 
-// GET /api/listings  — fetch all available listings (Charity browse feed)
+export const getPendingUsers = async () => {
+  const res = await fetch(`${BASE_URL}/auth/pending`, {
+    headers: getHeaders(),
+  });
+  return handleResponse(res);
+};
+
+export const updateUserStatus = async (id, status) => {
+  const res = await fetch(`${BASE_URL}/auth/update-status/${id}`, {
+    method: 'PUT',
+    headers: getHeaders(),
+    body: JSON.stringify({ status }),
+  });
+  return handleResponse(res);
+};
+
 export const getListings = async () => {
   const res = await fetch(`${BASE_URL}/listings`, {
     headers: getHeaders(),
@@ -64,15 +73,13 @@ export const getListings = async () => {
   return handleResponse(res);
 };
 
-// GET /api/listings/my  — fetch listings for the logged-in restaurant
-export const getMyListings = async () => {
-  const res = await fetch(`${BASE_URL}/listings/my`, {
+export const getMyListings = async (restaurantId) => {
+  const res = await fetch(`${BASE_URL}/listings/my-listings?restaurantId=${restaurantId}`, {
     headers: getHeaders(),
   });
   return handleResponse(res);
 };
 
-// POST /api/listings/add  — restaurant adds a new food listing
 export const addListing = async (listingData) => {
   const res = await fetch(`${BASE_URL}/listings/add`, {
     method: 'POST',
@@ -82,7 +89,6 @@ export const addListing = async (listingData) => {
   return handleResponse(res);
 };
 
-// PUT /api/listings/:id  — restaurant edits a listing
 export const updateListing = async (id, listingData) => {
   const res = await fetch(`${BASE_URL}/listings/${id}`, {
     method: 'PUT',
@@ -92,7 +98,6 @@ export const updateListing = async (id, listingData) => {
   return handleResponse(res);
 };
 
-// DELETE /api/listings/:id  — restaurant deletes a listing
 export const deleteListing = async (id) => {
   const res = await fetch(`${BASE_URL}/listings/${id}`, {
     method: 'DELETE',
@@ -101,29 +106,29 @@ export const deleteListing = async (id) => {
   return handleResponse(res);
 };
 
-// ================================================================
-//  REQUESTS  (charity requests a food listing)
-// ================================================================
+export const getFlaggedListings = async () => {
+  const res = await fetch(`${BASE_URL}/listings/flagged`, {
+    headers: getHeaders(),
+  });
+  return handleResponse(res);
+};
 
-// POST /api/requests  — charity submits a pickup request
-export const createRequest = async (listingId) => {
+export const createRequest = async (requestData) => {
   const res = await fetch(`${BASE_URL}/requests`, {
     method: 'POST',
     headers: getHeaders(),
-    body: JSON.stringify({ listingId }),
+    body: JSON.stringify(requestData),
   });
   return handleResponse(res);
 };
 
-// GET /api/requests/charity  — charity's own requests dashboard
-export const getCharityRequests = async () => {
-  const res = await fetch(`${BASE_URL}/requests/charity`, {
+export const getCharityRequests = async (charityId) => {
+  const res = await fetch(`${BASE_URL}/requests/charity/${charityId}`, {
     headers: getHeaders(),
   });
   return handleResponse(res);
 };
 
-// GET /api/requests/restaurant  — restaurant sees incoming requests
 export const getRestaurantRequests = async () => {
   const res = await fetch(`${BASE_URL}/requests/restaurant`, {
     headers: getHeaders(),
@@ -131,23 +136,17 @@ export const getRestaurantRequests = async () => {
   return handleResponse(res);
 };
 
-// PUT /api/requests/:id/status  — restaurant accepts or rejects
-export const updateRequestStatus = async (requestId, status) => {
-  const res = await fetch(`${BASE_URL}/requests/${requestId}/status`, {
+export const updateRequestStatus = async (id, status) => {
+  const res = await fetch(`${BASE_URL}/requests/${id}/status`, {
     method: 'PUT',
     headers: getHeaders(),
-    body: JSON.stringify({ status }),   // status: 'approved' | 'rejected'
+    body: JSON.stringify({ status }),
   });
   return handleResponse(res);
 };
 
-// ================================================================
-//  FEEDBACK
-// ================================================================
-
-// POST /api/feedback  — charity submits a rating after delivery
 export const submitFeedback = async (feedbackData) => {
-  const res = await fetch(`${BASE_URL}/feedback`, {
+  const res = await fetch(`${BASE_URL}/feedback/submit`, {
     method: 'POST',
     headers: getHeaders(),
     body: JSON.stringify(feedbackData),
@@ -155,7 +154,6 @@ export const submitFeedback = async (feedbackData) => {
   return handleResponse(res);
 };
 
-// GET /api/feedback/restaurant/:restaurantId  — get ratings for a restaurant
 export const getRestaurantFeedback = async (restaurantId) => {
   const res = await fetch(`${BASE_URL}/feedback/restaurant/${restaurantId}`, {
     headers: getHeaders(),
