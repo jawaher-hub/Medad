@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const listingSchema = new mongoose.Schema({
   foodName: { type: String, required: true },
   description: String,
+  restaurantName: String,
   quantity: Number,
   expiryTime: Date,
   photoUrl: String,

@@ -13,29 +13,31 @@ function CharityRequests() {
   const navigate  = useNavigate();
   const [requests, setRequests] = useState([]);
   const [loading, setLoading]   = useState(true);
-
   useEffect(() => {
-    const fetchRequests = async () => {
-      try {
-        const data = await getRestaurantRequests();
-        const normalised = data.map(r => ({
-          id:       r._id || r.id,
-          charity:  r.charityName || r.charity,
-          food:     r.listingTitle || r.food,
-          quantity: r.quantity,
-          pickup:   r.pickupDate  || r.pickup,
-          distance: r.distance    || '—',
-          status:   r.status      || 'Pending',
-        }));
-        setRequests(normalised);
-      } catch {
-        setRequests(DEMO_REQUESTS);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchRequests();
-  }, []);
+      const fetchRequests = async () => {
+        try {
+          const restaurantId = localStorage.getItem('userId'); 
+          if (!restaurantId) return;
+
+          const data = await getRestaurantRequests(restaurantId);
+          const normalised = data.map(r => ({
+            id:       r._id || r.id,
+            charity:  r.charityId?.name || r.charityName || 'Charity', 
+            food:     r.listingId?.title || r.food,
+            quantity: r.listingId?.quantity || r.quantity,
+            pickup:   r.listingId?.pickupDate || r.pickup,
+            distance: r.distance || '—',
+            status:   r.status || 'Pending',
+          }));
+          setRequests(normalised);
+        } catch {
+          setRequests(DEMO_REQUESTS);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchRequests();
+    }, []);
 
   const handleAccept = async (id) => {
     try { await updateRequestStatus(id, 'approved'); } catch {}

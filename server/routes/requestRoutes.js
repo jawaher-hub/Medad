@@ -1,23 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Request = require('../models/Request');
-const Listing = require('../models/Listing');
 
 router.post('/', async (req, res) => {
   try {
-    const { listingId, charityId } = req.body;
-    if (!listingId) return res.status(400).json({ error: 'listingId is required' });
-
-    const listing = await Listing.findById(listingId);
-    if (!listing) return res.status(404).json({ error: 'Listing not found' });
-
-    const newRequest = new Request({
-      listingId,
-      restaurantId: listing.restaurantId,
-      charityId,
-      status: 'Pending',
-    });
-
+    const newRequest = new Request(req.body);
     await newRequest.save();
     res.status(201).json(newRequest);
   } catch (err) {
@@ -25,74 +12,24 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/charity', async (req, res) => {
+router.get('/charity/:id', async (req, res) => {
   try {
-    const filter = {};
-    if (req.query.charityId) filter.charityId = req.query.charityId;
-
-    const requests = await Request.find(filter)
-      .populate('listingId')
-      .populate('restaurantId', 'name')
-      .populate('charityId', 'name');
-
-    const normalized = requests.map(r => ({
-      ...r.toObject(),
-      listingTitle: r.listingId?.foodName || r.listingId?.title,
-      restaurantName: r.restaurantId?.name,
-      quantity: r.listingId?.quantity,
-      pickupDate: r.listingId?.expiryTime || r.listingId?.expiryDate,
-      status: r.status === 'Pending' ? 'requested'
-            : r.status === 'Accepted' ? 'approved'
-            : r.status === 'Assigned' ? 'assigned'
-            : r.status === 'Delivered' ? 'completed'
-            : r.status === 'Rejected' ? 'rejected'
-            : r.status,
-    }));
-
-    res.json(normalized);
+    const requests = await Request.find({ charityId: req.params.id }).populate('listingId');
+    res.json(requests);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-router.get('/restaurant', async (req, res) => {
+router.get('/restaurant/:id', async (req, res) => {
   try {
-    const filter = {};
-    if (req.query.restaurantId) filter.restaurantId = req.query.restaurantId;
-
-    const requests = await Request.find(filter)
-      .populate('listingId')
-      .populate('charityId', 'name');
-
-    const normalized = requests.map(r => ({
-      ...r.toObject(),
-      listingTitle: r.listingId?.foodName || r.listingId?.title,
-      charityName: r.charityId?.name,
-      quantity: r.listingId?.quantity,
-      pickupDate: r.listingId?.expiryTime || r.listingId?.expiryDate,
-    }));
-
-    res.json(normalized);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-router.put('/:id/status', async (req, res) => {
-  try {
-    const status = req.body.status;
-    const mapped = status === 'approved' ? 'Accepted'
-      : status === 'rejected' ? 'Rejected'
-      : status;
-
-    const updated = await Request.findByIdAndUpdate(
-      req.params.id,
-      { status: mapped },
-      { new: true }
+    const requests = await Request.find().populate('listingId');
+    const restaurantRequests = requests.filter(r => 
+      r.listingId && r.listingId.restaurantId && r.listingId.restaurantId.toString() === req.params.id
     );
-    res.json(updated);
+    res.json(restaurantRequests);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(500).json({ error: err.message });
   }
 });
 
@@ -100,27 +37,10 @@ router.put('/assign/:id', async (req, res) => {
   try {
     const updated = await Request.findByIdAndUpdate(
       req.params.id,
-      {
-        representativeName: req.body.name,
+      { 
+        representativeName: req.body.name, 
         representativePhone: req.body.phone,
-        status: 'Assigned',
-      },
-      { new: true }
-    );
-    res.json(updated);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
-router.put('/confirm/:id', async (req, res) => {
-  try {
-    const updated = await Request.findByIdAndUpdate(
-      req.params.id,
-      {
-        status: 'Delivered',
-        deliveredAt: Date.now(),
-        proofPhoto: req.body.photo,
+        status: 'Assigned' 
       },
       { new: true }
     );

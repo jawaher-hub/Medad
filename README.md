@@ -368,3 +368,32 @@ Medad-Frontend/
 ├── package.json
 └── README.md
 ```
+##  Known Issues & Technical Limitations
+
+While the core infrastructure of **Medad** is functional, some integration challenges persist in the current version which may affect real-time data synchronization:
+
+*   **Real time Listing Synchronization**: Newly added food listings by restaurants may not appear on the Charity feed due to client side state synchronization issue.
+*   **Cross Role Data Persistence**: Updates to donation requests (e.g., status changes) might not reflect instantly across all dashboards (Admin, Restaurant, and Charity) without a manual page refresh.
+*   **Media Rendering**: The system is optimized for data object handling; however, seamless image hosting and rendering for food items are still undergoing optimization for production environments.
+
+
+---
+
+##  Future Roadmap & Proposed Solutions
+
+To address these limitations and enhance the platform's scalability and user experience, we have identified the following technical strategies for future implementation:
+
+### 1. Real time Communication with WebSockets
+We plan to replace standard REST polling with **WebSockets**. This will enable the Backend to "push" notifications and new listings to the Charity feed instantly, ensuring 100% real time synchronization without requiring a refresh.
+
+### 2. Global State Management
+To resolve data persistence issues across different user roles, we intend to implement **Redux** or the **React Context API**. This will create a "single source of truth" for the application state, ensuring that any update (like an approved request) is reflected across all components immediately.
+
+### 3. Advanced Cloudinary API Integration
+To improve food listing visibility, we plan to fully automate the **Cloudinary** pipeline. This includes automated image compression and CDN-based delivery to ensure food photos load instantly regardless of network conditions.
+
+### 4. Automated Notification Microservice
+We aim to develop a dedicated service to handle in-app and email notifications. This will alert **Charities** about new nearby listings and notify the **Admin** of any high-priority security flags or pending account approvals in real-time.
+
+### 5. Enhanced Admin Intelligence
+Future updates will include more granular analytics and automated reporting tools, allowing the **Admin** to monitor donation trends and safety metrics with higher precision and lower latency.
