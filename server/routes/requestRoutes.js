@@ -21,6 +21,18 @@ router.get('/charity/:id', async (req, res) => {
   }
 });
 
+router.get('/restaurant/:id', async (req, res) => {
+  try {
+    const requests = await Request.find().populate('listingId');
+    const restaurantRequests = requests.filter(r => 
+      r.listingId && r.listingId.restaurantId && r.listingId.restaurantId.toString() === req.params.id
+    );
+    res.json(restaurantRequests);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.put('/assign/:id', async (req, res) => {
   try {
     const updated = await Request.findByIdAndUpdate(
@@ -29,23 +41,6 @@ router.put('/assign/:id', async (req, res) => {
         representativeName: req.body.name, 
         representativePhone: req.body.phone,
         status: 'Assigned' 
-      },
-      { new: true }
-    );
-    res.json(updated);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
-router.put('/confirm/:id', async (req, res) => {
-  try {
-    const updated = await Request.findByIdAndUpdate(
-      req.params.id,
-      { 
-        status: 'Delivered',
-        deliveredAt: Date.now(),
-        proofPhoto: req.body.photo
       },
       { new: true }
     );

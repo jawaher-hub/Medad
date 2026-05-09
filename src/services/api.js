@@ -40,6 +40,10 @@ export const loginUser = async (email, password) => {
   const data = await handleResponse(res);
   if (data.token) localStorage.setItem('token', data.token);
   if (data.role)  localStorage.setItem('userRole', data.role);
+  
+  const idToStore = data.userId || data.id || (data.user && data.user._id);
+  if (idToStore) localStorage.setItem('userId', idToStore);
+  
   return data;
 };
 
@@ -129,13 +133,12 @@ export const getCharityRequests = async (charityId) => {
   return handleResponse(res);
 };
 
-export const getRestaurantRequests = async () => {
-  const res = await fetch(`${BASE_URL}/requests/restaurant`, {
+export const getRestaurantRequests = async (restaurantId) => {
+  const res = await fetch(`${BASE_URL}/requests/restaurant/${restaurantId}`, {
     headers: getHeaders(),
   });
   return handleResponse(res);
 };
-
 export const updateRequestStatus = async (id, status) => {
   const res = await fetch(`${BASE_URL}/requests/${id}/status`, {
     method: 'PUT',
