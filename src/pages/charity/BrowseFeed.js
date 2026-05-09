@@ -6,34 +6,38 @@ import { getListings } from '../../services/api';
 
 const BrowseFeed = () => {
   const navigate = useNavigate();
-  const [donations, setDonations]             = useState([]);
-  const [filteredDonations, setFiltered]      = useState([]);
-  const [searchTerm, setSearchTerm]           = useState('');
+  const [donations, setDonations]   = useState([]);
+  const [filteredDonations, setFiltered] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [isLoading, setIsLoading]             = useState(true);
-  const [apiError, setApiError]               = useState(''); // eslint-disable-line
+  const [isLoading, setIsLoading]   = useState(true);
 
-  // ── Fetch listings: try API first, fall back to mock ─────
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await getListings();
-        // Normalise backend field names to match what the UI expects
         const normalised = data.map(item => ({
           id:             item._id || item.id,
           title:          item.title || item.foodName,
           restaurantName: item.restaurantName || 'Restaurant',
           quantity:       item.quantity,
-          expiryDate:     item.expiryDate || item.expirationDate,
+          expiryDate:     item.expiryDate || item.expiryTime || item.expirationDate,
           category:       item.category,
           distance:       item.distance || '—',
-          image:          item.image || item.photoUrl ||
-                          'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop',
+          image: {
+            cooked:      'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop',
+            bakery:      'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=400&h=300&fit=crop',
+            produce:     'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop',
+            dairy:       'https://images.unsplash.com/photo-1628088062854-d1870b4553da?w=400&h=300&fit=crop',
+            'fast food': 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop',
+            dessert:     'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=400&h=300&fit=crop',
+            arabic:      'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400&h=300&fit=crop',
+            english:     'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop',
+          }[item.category?.toLowerCase()] || 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop',
         }));
         setDonations(normalised);
         setFiltered(normalised);
       } catch {
-        // Backend not ready — use mock data
         setDonations(mockDonations);
         setFiltered(mockDonations);
       } finally {
@@ -43,7 +47,6 @@ const BrowseFeed = () => {
     fetchData();
   }, []);
 
-  // ── Filter whenever search/category changes ───────────────
   useEffect(() => {
     let results = donations;
     if (searchTerm) {
@@ -74,15 +77,11 @@ const BrowseFeed = () => {
         <h1 className="browse-title">Food Donations Near You</h1>
         <p className="browse-subtitle">Browse and request surplus food from local restaurants</p>
       </div>
-
-      {apiError && <div className="error-banner">{apiError}</div>}
-
       <div className="browse-search-section">
         <input type="text" placeholder="Search by food name or restaurant..."
           value={searchTerm} onChange={e => setSearchTerm(e.target.value)}
           className="browse-search-input" />
       </div>
-
       <div className="browse-categories">
         {categories.map(cat => (
           <button key={cat}
@@ -92,9 +91,7 @@ const BrowseFeed = () => {
           </button>
         ))}
       </div>
-
       <div className="browse-results-count">Found {filteredDonations.length} donations</div>
-
       <div className="browse-grid">
         {filteredDonations.map(donation => (
           <div key={donation.id} className="donation-card"
@@ -114,7 +111,6 @@ const BrowseFeed = () => {
           </div>
         ))}
       </div>
-
       {filteredDonations.length === 0 && (
         <div className="auth-form" style={{ textAlign: 'center', marginTop: '40px' }}>
           <p>No donations found. Try adjusting your search or filters.</p>
